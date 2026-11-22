@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SK HomeCare Admin</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self';">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ch:#1C1C1A;--dk:#2D2D2B;--md:#606058;--mu:#9C9C94;
+  --iv:#FAFAF8;--iv2:#F3F2EE;--iv3:#EDEBE5;
+  --gd:#B8962E;--gl:#D4AF56;--wh:#FFFFFF;--bk:#0A0A08;
+  --sd:#1A1918;--s2:#222220;
+  --bd:rgba(28,28,26,.1);--bds:rgba(28,28,26,.06);
+  --sh:0 2px 16px rgba(28,28,26,.08);
+  --red:#DC2626;--green:#16A34A;--blue:#2563EB;--r:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Manrope',system-ui,sans-serif;background:var(--iv);color:var(--ch);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+img{max-width:100%;display:block}
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#1A1918,#0A0A08);padding:20px}
+.login-box{background:var(--s2);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:44px 36px;width:100%;max-width:400px}
+.login-logo{display:flex;align-items:center;gap:11px;margin-bottom:32px}
+.lmk{width:40px;height:40px;border-radius:10px;background:var(--gd);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.lmk img{width:100%;height:100%;object-fit:cover}
+.lmk svg{width:22px;height:22px}
+.ltx{font-size:1rem;font-weight:700;color:var(--iv)}
+.ltx small{display:block;font-size:.6rem;color:rgba(240,239,235,.4);letter-spacing:.08em;text-transform:uppercase}
+.login-box h2{font-size:1.4rem;font-weight:800;color:var(--iv);margin-bottom:6px}
+.login-box p{font-size:.84rem;color:rgba(240,239,235,.45);margin-bottom:28px}
+.lf{display:flex;flex-direction:column;gap:14px}
+.lf-g label{font-size:.72rem;font-weight:600;color:rgba(240,239,235,.5);margin-bottom:4px;display:block}
+.lf-g input{width:100%;padding:12px 15px;border-radius:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);outline:none;font-size:15px;color:var(--iv);transition:border-color .2s}
+.lf-g input:focus{border-color:rgba(184,150,46,.6)}
+.login-btn{width:100%;padding:14px;border-radius:9px;background:var(--gd);color:var(--bk);font-weight:700;font-size:.95rem;border:none;cursor:pointer;margin-top:4px;transition:background .2s}
+.login-btn:hover{background:var(--gl)}.login-btn:disabled{opacity:.5;cursor:wait}
+.lerr{font-size:.78rem;color:#f87171;text-align:center;min-height:1.2em}
+.login-cfg{font-size:.74rem;color:rgba(240,239,235,.35);text-align:center;margin-top:16px;line-height:1.6}
+.login-cfg code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px}
+/* APP */
+#app{display:none;min-height:100vh}
+#app.show{display:flex}
+.sidebar{width:240px;background:var(--sd);border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-logo{display:flex;align-items:center;gap:10px;padding:20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-logo-img{width:34px;height:34px;border-radius:8px;background:var(--gd);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.sb-logo-img img{width:100%;height:100%;object-fit:cover}
+.sb-logo-img svg{width:19px;height:19px}
+.sb-ltx{font-size:.86rem;font-weight:700;color:var(--iv);line-height:1.2}
+.sb-ltx small{display:block;font-size:.56rem;color:rgba(240,239,235,.35);letter-spacing:.06em;text-transform:uppercase}
+.sb-nav{flex:1;padding:12px 10px}
+.sb-sec{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,239,235,.28);padding:12px 10px 6px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:.82rem;font-weight:500;color:rgba(240,239,235,.55);cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left}
+.sb-link:hover{background:rgba(255,255,255,.05);color:var(--iv)}
+.sb-link.on{background:rgba(184,150,46,.15);color:var(--gl);font-weight:600}
+.sb-link svg{width:17px;height:17px;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--red);color:#fff;font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:99px;min-width:18px;text-align:center}
+.sb-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-user{font-size:.76rem;color:rgba(240,239,235,.4);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-btn{font-size:.78rem;font-weight:600;color:rgba(240,239,235,.5);border:1px solid rgba(255,255,255,.1);background:transparent;padding:7px 14px;border-radius:7px;cursor:pointer;transition:all .2s;width:100%}
+.logout-btn:hover{color:var(--iv)}
+/* MAIN */
+.main{flex:1;min-width:0;overflow-y:auto}
+.pane{display:none;padding:32px;max-width:1180px}
+.pane.on{display:block}
+.pane-hd{margin-bottom:24px}
+.pane-hd h1{font-size:1.5rem;font-weight:800;letter-spacing:-.04em;margin-bottom:4px}
+.pane-hd p{font-size:.86rem;color:var(--md)}
+.pane-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.pane-row h1{font-size:1.5rem;font-weight:800;letter-spacing:-.04em;margin-bottom:0}
+.pane-row p{font-size:.86rem;color:var(--md);margin-top:2px}
+/* CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat{background:var(--wh);border:1px solid var(--bds);border-radius:var(--r);padding:18px;transition:box-shadow .2s}
+.stat:hover{box-shadow:var(--sh)}
+.stat-val{font-size:1.8rem;font-weight:800;letter-spacing:-.05em;line-height:1}
+.stat-lbl{font-size:.74rem;color:var(--mu);margin-top:5px}
+.card{background:var(--wh);border:1px solid var(--bds);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--bds)}
+.card-hd h3{font-size:.92rem;font-weight:700}
+.card-body{padding:20px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:8px;font-weight:600;font-size:.82rem;border:1.5px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:wait;transform:none}
+.btn-dk{background:var(--ch);color:var(--wh)}.btn-dk:hover{background:var(--dk)}
+.btn-gd{background:var(--gd);color:var(--bk)}.btn-gd:hover{background:var(--gl)}
+.btn-ol{border-color:var(--bd);color:var(--ch)}.btn-ol:hover{border-color:rgba(28,28,26,.28);background:var(--iv2)}
+.btn-red{background:var(--red);color:var(--wh)}.btn-red:hover{background:#B91C1C}
+.btn-green{background:var(--green);color:var(--wh)}
+.btn-sm{padding:5px 12px;font-size:.74rem}
+.btn-icon{width:30px;height:30px;padding:0;border-radius:7px;display:flex;align-items:center;justify-content:center;border:1px solid var(--bd);background:var(--iv2);cursor:pointer;transition:all .2s;color:var(--md);font-size:13px}
+.btn-icon:hover{background:var(--iv3);color:var(--ch)}
+.btn-icon.red:hover{background:#FEE2E2;color:var(--red)}
+/* FORMS */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+.f-grp{display:flex;flex-direction:column;gap:4px}
+.f-grp label{font-size:.74rem;font-weight:600;color:var(--md)}
+.f-grp input,.f-grp select,.f-grp textarea{padding:9px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--iv2);font-size:.88rem;outline:none;transition:border-color .2s;width:100%}
+.f-grp input:focus,.f-grp select:focus,.f-grp textarea:focus{border-color:var(--gd);background:var(--wh)}
+.f-grp textarea{min-height:76px;resize:vertical}
+.f-grp .hint{font-size:.7rem;color:var(--mu);margin-top:2px}
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;font-size:.84rem}
+.tbl th{padding:10px 13px;text-align:left;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);background:var(--iv2);border-bottom:1px solid var(--bds)}
+.tbl td{padding:12px 13px;border-bottom:1px solid var(--bds);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--iv2)}
+.acts{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.badge{display:inline-block;padding:3px 8px;border-radius:99px;font-size:.68rem;font-weight:700}
+.badge-green{background:#D1FAE5;color:#065F46}
+.badge-red{background:#FEE2E2;color:#991B1B}
+.badge-yellow{background:#FEF3C7;color:#92400E}
+.badge-blue{background:#DBEAFE;color:#1E40AF}
+/* GALLERY */
+.gal-mgr{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gal-card{background:var(--iv2);border:1px solid var(--bds);border-radius:var(--r);overflow:hidden}
+.gal-card img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.gal-card-info{padding:10px 12px}
+.gal-card-cap{font-size:.76rem;color:var(--md);margin-bottom:7px;line-height:1.4}
+.gal-card-acts{display:flex;gap:5px}
+.upload-zone{border:2px dashed var(--bd);border-radius:var(--r);padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--iv2)}
+.upload-zone:hover{border-color:var(--gd)}
+.upload-zone input[type=file]{display:none}
+/* FILTER BAR */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;padding:14px 18px;border-bottom:1px solid var(--bds)}
+/* INVOICE */
+.inv-items-tbl{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:.86rem}
+.inv-items-tbl th{background:var(--iv2);padding:9px 11px;text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--bds)}
+.inv-items-tbl td{padding:8px 11px;border-bottom:1px solid var(--bds);vertical-align:middle}
+.inv-items-tbl input{padding:6px 9px;border:1px solid var(--bd);border-radius:6px;background:var(--iv2);font-size:.86rem;width:100%;outline:none}
+.inv-items-tbl input:focus{border-color:var(--gd);background:var(--wh)}
+.inv-summary{background:var(--iv2);border-radius:10px;padding:16px;font-size:.88rem}
+.inv-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bds)}
+.inv-row:last-child{border-bottom:none;font-size:1rem;font-weight:800;color:var(--ch);padding-top:9px}
+.inv-row span:last-child{font-weight:700}
+/* PRINT */
+@media print{
+  #app{display:none!important}
+  #invoice-print-area{display:block!important}
+  @page{size:A4;margin:1.8cm}
+  body{background:#fff}
+}
+#invoice-print-area{display:none}
+/* Reference-style invoice with selectable color palettes */
+#invoice-print-area.ip-print{box-sizing:border-box;width:100%;max-width:790px;min-height:1030px;margin:0 auto;padding:54px 58px;background:#f5f1ea;color:#27241f;font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#invoice-print-area .ip-header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;padding:0 0 22px;border:0}
+#invoice-print-area .ip-meta h1{font-family:'Segoe Script','Brush Script MT',cursive;font-size:60px;font-weight:400;font-style:italic;line-height:1;color:var(--ip-accent);letter-spacing:0;text-align:left}
+#invoice-print-area .ip-meta p{font-size:11px;font-weight:700;line-height:1.7;letter-spacing:.08em;text-align:right;color:var(--ip-accent);text-transform:uppercase}
+#invoice-print-area .ip-parties{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:34px;margin-bottom:30px;padding:0 8px 22px;border-bottom:1px solid var(--ip-rule)}
+#invoice-print-area .ip-party h4{font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--ip-accent);margin:0 0 6px}
+#invoice-print-area .ip-party p{font-size:12px;line-height:1.55;color:#39352f;margin:0 0 18px}
+#invoice-print-area .ip-party p:last-child{margin-bottom:0}
+#invoice-print-area .ip-logo-stack{text-align:center;align-self:center;color:var(--ip-accent)}
+#invoice-print-area .ip-logo-seal{width:112px;height:112px;border-radius:50%;margin:0 auto 9px;display:flex;align-items:center;justify-content:center;background:var(--ip-accent);color:#fff;overflow:hidden}
+#invoice-print-area .ip-logo{width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;margin:0;padding:14px;background:var(--ip-accent)}
+#invoice-print-area .ip-logo-fallback{font-family:Georgia,serif;font-size:38px;font-weight:700;letter-spacing:-.08em}
+#invoice-print-area .ip-logo-name{font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+#invoice-print-area .ip-items{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:12px}
+#invoice-print-area .ip-items th{padding:10px 9px;text-align:left;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#39352f;border-top:1px solid var(--ip-rule);border-bottom:1px solid var(--ip-rule);background:transparent}
+#invoice-print-area .ip-items td{padding:11px 9px;border-bottom:0;color:#39352f}
+#invoice-print-area .ip-items tr:last-child td{border-bottom:1px solid var(--ip-rule)}
+#invoice-print-area .ip-totals{display:flex;justify-content:flex-end;margin:0 0 24px}
+#invoice-print-area .ip-totals-inner{width:250px;font-size:11px}
+#invoice-print-area .ip-t-row{display:flex;justify-content:space-between;padding:4px 8px;border:0;color:#39352f}
+#invoice-print-area .ip-t-row:last-child{border-top:1px solid var(--ip-rule);font-size:12px;font-weight:800;padding-top:8px;color:var(--ip-accent)}
+#invoice-print-area .ip-status{display:inline-block;padding:3px 0;border-radius:0;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin:5px 0;border:0;color:var(--ip-accent)}
+#invoice-print-area .ip-status.paid,#invoice-print-area .ip-status.unpaid{color:var(--ip-accent);border:0}
+#invoice-print-area .ip-footer{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:28px;padding:0;border:0;text-align:left;color:#39352f}
+#invoice-print-area .ip-payment h4{font-size:12px;font-family:Georgia,serif;font-style:italic;font-weight:600;margin:0 0 9px;color:var(--ip-accent)}
+#invoice-print-area .ip-payment p{font-size:10px;line-height:1.55;margin:0;color:#5b554c}
+#invoice-print-area .ip-thanks{text-align:right;align-self:end}
+#invoice-print-area .ip-thanks strong{display:block;font-family:'Segoe Script','Brush Script MT',cursive;font-size:28px;font-style:italic;font-weight:400;color:var(--ip-accent);margin-bottom:8px}
+#invoice-print-area .ip-thanks span{font-size:9px;letter-spacing:.1em;color:#6e665b}
+#invoice-print-area.inv-theme-minimal-beige{--ip-accent:#a88b66;--ip-rule:#9c917f;background:#f5f1ea;color:#27241f}
+#invoice-print-area.inv-theme-sk-gold{--ip-accent:#997328;--ip-rule:#c3a96d;background:#fbf7ee;color:#29251d}
+#invoice-print-area.inv-theme-modern-navy{--ip-accent:#294a69;--ip-rule:#98aab9;background:#f1f4f7;color:#1e2933}
+#invoice-print-area.inv-theme-classic-clean{--ip-accent:#363636;--ip-rule:#777;background:#fff;color:#222}
+#invoice-print-area.inv-theme-soft-sage{--ip-accent:#71816a;--ip-rule:#a9b4a2;background:#f3f5ef;color:#263026}
+@media print{body *{visibility:hidden!important}#invoice-print-area,#invoice-print-area *{visibility:visible!important}#invoice-print-area{display:block!important;position:absolute;left:0;top:0;min-height:0;width:100%;margin:0;padding:12mm 13mm!important;box-shadow:none!important}@page{size:A4;margin:0}}
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
+.ti{padding:11px 16px;border-radius:9px;font-size:.84rem;font-weight:600;color:#fff;max-width:300px;animation:tin .28s ease both;box-shadow:0 4px 20px rgba(0,0,0,.18)}
+.ti.ok{background:var(--green)}.ti.err{background:var(--red)}.ti.info{background:var(--blue)}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* MODALS */
+.mo{display:none;position:fixed;inset:0;z-index:800;background:rgba(10,10,8,.52);align-items:center;justify-content:center;padding:16px}
+.mo.show{display:flex}
+.mo-box{background:var(--wh);border-radius:14px;padding:28px;width:100%;max-width:580px;box-shadow:0 24px 64px rgba(0,0,0,.18);max-height:92vh;overflow-y:auto}
+.mo-box.wide{max-width:860px}
+.mo-box h3{font-size:1.05rem;font-weight:800;letter-spacing:-.03em;margin-bottom:18px}
+.mo-foot{display:flex;gap:9px;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--bds)}
+.cfg-banner{background:#FEF3C7;border:1px solid #FDE68A;border-radius:var(--r);padding:14px 18px;margin-bottom:20px;font-size:.84rem;color:#92400E;line-height:1.6}
+.empty{text-align:center;padding:40px 20px;color:var(--mu);font-size:.86rem}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+/* FOLLOW-UPS */
+.fu-row{padding:14px 18px;border-bottom:1px solid var(--bds);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.fu-row:last-child{border-bottom:none}
+.fu-info{flex:1;min-width:200px}
+.fu-name{font-size:.9rem;font-weight:700;color:var(--ch)}
+.fu-detail{font-size:.78rem;color:var(--md);margin-top:2px}
+.fu-overdue{color:var(--red)}.fu-due-soon{color:#D97706}
+/* BEFORE/AFTER PAIRS */
+.ba-pair-card{background:var(--iv2);border:1px solid var(--bds);border-radius:12px;overflow:hidden}
+.ba-pair-imgs{display:grid;grid-template-columns:1fr 1fr}
+.ba-pair-imgs img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.ba-pair-info{padding:10px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+/* CUSTOMER */
+.cust-row{padding:14px 18px;border-bottom:1px solid var(--bds);cursor:pointer;transition:background .18s;display:flex;align-items:center;gap:14px}
+.cust-row:hover{background:var(--iv2)}
+.cust-row:last-child{border-bottom:none}
+.cust-av{width:38px;height:38px;border-radius:50%;background:var(--gd);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:var(--bk);flex-shrink:0}
+.cust-info{flex:1;min-width:0}
+.cust-name{font-size:.9rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cust-meta{font-size:.76rem;color:var(--md);margin-top:2px}
+.cust-stat{text-align:right;flex-shrink:0}
+.cust-visits{font-size:.86rem;font-weight:700;color:var(--ch)}
+.cust-last{font-size:.72rem;color:var(--mu)}
+@media(max-width:900px){.stat-row{grid-template-columns:1fr 1fr}.gal-mgr{grid-template-columns:1fr 1fr}.sidebar{width:52px}.sb-ltx,.sb-nav .sb-sec,.sb-link span,.sb-user,.logout-btn{display:none}.sb-link{justify-content:center;padding:11px}}
+@media(max-width:600px){.stat-row{grid-template-columns:1fr}.gal-mgr{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.pane{padding:16px}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="lmk" id="login-logo-wrap"><svg viewBox="0 0 20 20" fill="none"><path d="M3 6h14M3 10h9M3 14h6" stroke="#0A0A08" stroke-width="1.75" stroke-linecap="round"/></svg></div>
+      <div class="ltx">SK HomeCare<small>Admin Dashboard</small></div>
+    </div>
+    <h2>Sign in</h2>
+    <p>Use your admin email and password from Supabase.</p>
+    <div class="lf">
+      <div class="lf-g"><label>Email</label><input type="email" id="l-email" placeholder="admin@example.com" autocomplete="username"></div>
+      <div class="lf-g"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="lerr" id="l-err" role="alert"></div>
+      <button class="login-btn" id="l-btn">Sign In</button>
+    </div>
+    <div class="login-cfg">Configure: open <code>admin.html</code> and set<br><code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-img" id="sb-logo-img"><svg viewBox="0 0 20 20" fill="none"><path d="M3 6h14M3 10h9M3 14h6" stroke="#0A0A08" stroke-width="1.75" stroke-linecap="round"/></svg></div>
+      <div class="sb-ltx">SK HomeCare<small>Admin Panel</small></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-sec">Main</div>
+      <button class="sb-link on" data-pane="overview"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="11" y="2" width="7" height="7" rx="1"/><rect x="2" y="11" width="7" height="7" rx="1"/><rect x="11" y="11" width="7" height="7" rx="1"/></svg><span>Overview</span></button>
+      <button class="sb-link" data-pane="services"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2.5l3 3-10 10H5v-2.5l9.5-9.5zM12.5 4.5l3 3"/></svg><span>Services</span></button>
+      <button class="sb-link" data-pane="gallery"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="2"/><circle cx="7" cy="9" r="1.5"/><path d="M2 14l4-4 3 3 3-3 6 5"/></svg><span>Gallery</span></button>
+      <button class="sb-link" data-pane="before-after"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="7" height="12" rx="1"/><rect x="11" y="4" width="7" height="12" rx="1"/><path d="M9 10h2"/></svg><span>Before / After</span></button>
+      <button class="sb-link" data-pane="reviews"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2l2.4 4.9 5.6.8-4 3.9.9 5.4L10 14.5l-4.9 2.5.9-5.4L2 7.7l5.6-.8z"/></svg><span>Reviews</span></button>
+      <button class="sb-link" data-pane="content"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5h12M4 8h8M4 11h10M4 14h6"/></svg><span>Website Text</span></button>
+      <button class="sb-link" data-pane="faqs"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M10 6v.01M10 10v4"/></svg><span>FAQs</span></button>
+      <div class="sb-sec">Bookings</div>
+      <button class="sb-link" data-pane="bookings"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M2 7h16M6 3v4M14 3v4"/></svg><span>Bookings</span></button>
+      <button class="sb-link" data-pane="invoices"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="1"/><path d="M7 7h6M7 10h6M7 13h4"/></svg><span>Invoices</span></button>
+      <button class="sb-link" data-pane="customers"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="3"/><path d="M3 17a7 7 0 0114 0"/></svg><span>Customers</span></button>
+      <button class="sb-link" data-pane="followups"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg><span>Follow-ups <span class="sb-badge" id="fu-badge" style="display:none">0</span></span></button>
+      <div class="sb-sec">Settings</div>
+      <button class="sb-link" data-pane="profile"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="16" height="16" rx="2"/><path d="M6 8h8M6 11h5"/></svg><span>Business Profile</span></button>
+      <button class="sb-link" data-pane="settings"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2"/></svg><span>Settings</span></button>
+    </nav>
+    <div class="sb-footer"><div class="sb-user" id="sb-user-email"></div><button class="logout-btn" id="logout-btn">Sign Out</button></div>
+  </div>
+
+  <div class="main">
+    <!-- OVERVIEW -->
+    <div class="pane on" id="pane-overview">
+      <div class="pane-hd"><h1>Overview</h1><p>Quick summary of your business.</p></div>
+      <div id="cfg-banner-wrap"></div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-val" id="st-today" style="color:var(--blue)">—</div><div class="stat-lbl">Today's bookings</div></div>
+        <div class="stat"><div class="stat-val" id="st-pending" style="color:var(--gd)">—</div><div class="stat-lbl">Pending bookings</div></div>
+        <div class="stat"><div class="stat-val" id="st-fu" style="color:var(--red)">—</div><div class="stat-lbl">Follow-ups due</div></div>
+        <div class="stat"><div class="stat-val" id="st-rev" style="color:var(--green)">—</div><div class="stat-lbl">Collected this month</div></div>
+        <div class="stat"><div class="stat-val" id="st-cust">—</div><div class="stat-lbl">Total customers</div></div>
+        <div class="stat"><div class="stat-val" id="st-unpaid" style="color:#D97706">—</div><div class="stat-lbl">Unpaid invoices</div></div>
+        <div class="stat"><div class="stat-val" id="st-svcs">—</div><div class="stat-lbl">Services</div></div>
+        <div class="stat"><div class="stat-val" id="st-src" style="font-size:.88rem;color:var(--gd)">—</div><div class="stat-lbl">Data source</div></div>
+      </div>
+      <div class="card"><div class="card-hd"><h3>Quick Actions</h3></div>
+        <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-dk" onclick="goPane('bookings')">View Bookings</button>
+          <button class="btn btn-ol" onclick="goPane('invoices')">Invoices</button>
+          <button class="btn btn-ol" onclick="goPane('followups')">Follow-ups</button>
+          <button class="btn btn-ol" onclick="goPane('services')">Edit Services</button>
+          <a href="index.html" target="_blank" class="btn btn-ol">View Website ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="pane" id="pane-services">
+      <div class="pane-row"><div><h1>Services</h1><p>Add, edit or remove services.</p></div><button class="btn btn-gd" id="add-svc-btn">+ Add Service</button></div>
+      <div class="card"><div class="card-body" style="padding:0;overflow-x:auto">
+        <table class="tbl"><thead><tr><th>Icon</th><th>Name</th><th>Price</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="svc-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="pane" id="pane-gallery">
+      <div class="pane-hd"><h1>Gallery</h1><p>Upload and manage AC installation photos.</p></div>
+      <div class="card" style="margin-bottom:16px"><div class="card-hd"><h3>Upload Image</h3></div>
+        <div class="card-body">
+          <label class="upload-zone" id="upload-zone" style="display:block">
+            <input type="file" id="gal-file" accept="image/*">
+            <div style="text-align:center;padding:16px 0">
+              <div style="font-size:2rem;margin-bottom:8px">📷</div>
+              <p style="font-size:.84rem;color:var(--md)">Click to choose a photo (max 5 MB)</p>
+            </div>
+          </label>
+          <div id="gal-preview" style="display:none;margin-top:12px">
+            <img id="gal-prev-img" style="max-height:180px;border-radius:8px;margin-bottom:10px">
+            <div class="f-grp"><label>Caption</label><input type="text" id="gal-cap" placeholder="e.g. TCL Split AC — Residential installation, Cidco"></div>
+            <div style="display:flex;gap:9px;margin-top:10px">
+              <button class="btn btn-gd" id="gal-upload-btn">Upload</button>
+              <button class="btn btn-ol" id="gal-cancel-btn">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="card-hd"><h3>Current Images</h3><span id="gal-count" style="font-size:.78rem;color:var(--mu)"></span></div>
+        <div class="card-body"><div class="gal-mgr" id="gal-mgr"><p class="empty">Loading...</p></div></div>
+      </div>
+    </div>
+
+    <!-- BEFORE/AFTER -->
+    <div class="pane" id="pane-before-after">
+      <div class="pane-hd"><h1>Before / After</h1><p>Upload AC wash comparison pairs shown on the public site.</p></div>
+      <div class="card" style="margin-bottom:16px"><div class="card-hd"><h3>Upload New Pair</h3></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="f-grp">
+              <label>Before image</label>
+              <label class="upload-zone" id="ba-before-zone" style="padding:16px;cursor:pointer">
+                <input type="file" id="ba-before-file" accept="image/*">
+                <div style="text-align:center"><div style="font-size:1.5rem">📸</div><p style="font-size:.78rem;color:var(--md);margin-top:4px">Before (click to select)</p></div>
+              </label>
+              <img id="ba-before-prev" style="display:none;max-height:120px;border-radius:7px;margin-top:7px">
+            </div>
+            <div class="f-grp">
+              <label>After image</label>
+              <label class="upload-zone" id="ba-after-zone" style="padding:16px;cursor:pointer">
+                <input type="file" id="ba-after-file" accept="image/*">
+                <div style="text-align:center"><div style="font-size:1.5rem">✨</div><p style="font-size:.78rem;color:var(--md);margin-top:4px">After (click to select)</p></div>
+              </label>
+              <img id="ba-after-prev" style="display:none;max-height:120px;border-radius:7px;margin-top:7px">
+            </div>
+          </div>
+          <div class="f-grp" style="margin-bottom:12px"><label>Caption</label><input type="text" id="ba-cap" placeholder="e.g. TCL Split AC deep wash, Cidco"></div>
+          <button class="btn btn-gd" id="ba-upload-btn" disabled>Upload Pair</button>
+        </div>
+      </div>
+      <div class="card"><div class="card-hd"><h3>Pairs</h3><span id="ba-count" style="font-size:.78rem;color:var(--mu)"></span></div>
+        <div class="card-body"><div id="ba-pairs" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px"><p class="empty">Loading...</p></div></div>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="pane" id="pane-reviews">
+      <div class="pane-row"><div><h1>Reviews</h1><p>Manage customer reviews shown on the public site.</p></div><button class="btn btn-gd" id="add-rv-btn">+ Add Review</button></div>
+      <div class="card"><div class="card-body" style="padding:0;overflow-x:auto">
+        <table class="tbl"><thead><tr><th>Name</th><th>Area</th><th>Rating</th><th>Review</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="rv-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- WEBSITE TEXT -->
+    <div class="pane" id="pane-content">
+      <div class="pane-hd"><h1>Website Text</h1><p>Edit headings, descriptions and button labels.</p></div>
+      <div id="content-sections"></div>
+    </div>
+
+    <!-- FAQS -->
+    <div class="pane" id="pane-faqs">
+      <div class="pane-row"><div><h1>FAQs</h1><p>Add, edit or reorder frequently asked questions.</p></div><button class="btn btn-gd" id="add-faq-btn">+ Add FAQ</button></div>
+      <div class="card"><div class="card-body" style="padding:0;overflow-x:auto">
+        <table class="tbl"><thead><tr><th>#</th><th>Question</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="faq-tbody"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="pane" id="pane-bookings">
+      <div class="pane-row">
+        <div><h1>Bookings</h1><p>All booking requests.</p></div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn btn-ol" onclick="loadBookings()">&#8635; Refresh</button>
+          <button class="btn btn-ol" onclick="exportBkCSV()">&#8595; CSV</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="filter-bar">
+          <div class="f-grp"><label>Date</label><input type="date" id="bk-filter-dt" style="font-size:.84rem"></div>
+          <div class="f-grp"><label>Status</label>
+            <select id="bk-filter-st" style="font-size:.84rem">
+              <option value="">All</option><option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option><option value="cancelled">Cancelled</option><option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="f-grp" style="flex:1;min-width:140px"><label>Search</label><input type="text" id="bk-search" placeholder="Name or phone..." style="font-size:.84rem"></div>
+          <button class="btn btn-dk btn-sm" onclick="loadBookings()">Apply</button>
+          <button class="btn btn-ol btn-sm" id="bk-clear-btn">Clear</button>
+          <span id="bk-count" style="font-size:.78rem;color:var(--mu);align-self:center"></span>
+        </div>
+      </div>
+      <div class="card"><div class="card-body" style="padding:0;overflow-x:auto">
+        <table class="tbl"><thead><tr><th>Ref</th><th>Date &amp; Time</th><th>Service</th><th>Customer</th><th>Area</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="bk-tbody"><tr><td colspan="7" style="text-align:center;padding:24px;color:var(--mu)">Click &#8635; Refresh to load.</td></tr></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- INVOICES -->
+    <div class="pane" id="pane-invoices">
+      <div class="pane-row">
+        <div><h1>Invoices</h1><p>Create and manage invoices.</p></div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn btn-gd" onclick="openInvEditor(null)">+ New Invoice</button>
+          <button class="btn btn-ol" onclick="exportInvCSV()">&#8595; CSV</button>
+        </div>
+      </div>
+      <div class="stat-row" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px">
+        <div class="stat"><div class="stat-val" id="inv-stat-month" style="color:var(--green)">—</div><div class="stat-lbl">Collected this month</div></div>
+        <div class="stat"><div class="stat-val" id="inv-stat-unpaid" style="color:#D97706">—</div><div class="stat-lbl">Unpaid total</div></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="filter-bar">
+          <div class="f-grp"><label>Date</label><input type="date" id="inv-filter-dt" style="font-size:.84rem"></div>
+          <div class="f-grp"><label>Status</label>
+            <select id="inv-filter-st" style="font-size:.84rem">
+              <option value="">All</option><option value="unpaid">Unpaid</option><option value="paid">Paid</option>
+            </select>
+          </div>
+          <div class="f-grp" style="flex:1;min-width:140px"><label>Search</label><input type="text" id="inv-search" placeholder="Number, name or phone..." style="font-size:.84rem"></div>
+          <button class="btn btn-dk btn-sm" onclick="loadInvoices()">Apply</button>
+          <button class="btn btn-ol btn-sm" onclick="document.getElementById('inv-filter-dt').value='';document.getElementById('inv-filter-st').value='';document.getElementById('inv-search').value='';loadInvoices()">Clear</button>
+        </div>
+      </div>
+      <div class="card"><div class="card-body" style="padding:0;overflow-x:auto">
+        <table class="tbl"><thead><tr><th>Invoice #</th><th>Date</th><th>Customer</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="inv-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="pane" id="pane-customers">
+      <div class="pane-hd"><h1>Customers</h1><p>All customers grouped by phone number.</p></div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="filter-bar">
+          <div class="f-grp" style="flex:1"><label>Search</label><input type="text" id="cust-search" placeholder="Name, phone or area..." style="font-size:.84rem" oninput="filterCustomers()"></div>
+        </div>
+      </div>
+      <div class="card"><div class="card-body" style="padding:0"><div id="cust-list"><p class="empty">Loading...</p></div></div></div>
+    </div>
+
+    <!-- FOLLOW-UPS -->
+    <div class="pane" id="pane-followups">
+      <div class="pane-hd"><h1>Follow-ups</h1><p>Customers due for their next service.</p></div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="filter-bar">
+          <div class="f-grp"><label>Show</label>
+            <select id="fu-filter" style="font-size:.84rem" onchange="loadFollowUps()">
+              <option value="active">Due now</option>
+              <option value="soon">Due within 14 days</option>
+              <option value="all">All active</option>
+            </select>
+          </div>
+          <button class="btn btn-dk btn-sm" onclick="loadFollowUps()">&#8635; Refresh</button>
+          <span id="fu-count" style="font-size:.78rem;color:var(--mu);align-self:center"></span>
+        </div>
+      </div>
+      <div class="card"><div class="card-body" style="padding:0"><div id="fu-list"><p class="empty">Loading...</p></div></div></div>
+    </div>
+
+    <!-- BUSINESS PROFILE -->
+    <div class="pane" id="pane-profile">
+      <div class="pane-hd"><h1>Business Profile</h1><p>Business details used on invoices and the admin panel.</p></div>
+      <div class="card" style="margin-bottom:16px"><div class="card-hd"><h3>Logo</h3></div>
+        <div class="card-body">
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <img id="profile-logo-preview" style="max-height:60px;max-width:140px;object-fit:contain;display:none;border:1px solid var(--bds);border-radius:8px;padding:6px">
+            <div>
+              <label class="btn btn-ol" style="cursor:pointer">Upload Logo <input type="file" id="profile-logo-file" accept="image/*" style="display:none"></label>
+              <div class="hint" style="margin-top:5px">PNG/JPG/WebP, max 2 MB. Appears on invoices and sidebar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="card-hd"><h3>Business Details</h3></div>
+        <div class="card-body">
+          <div class="form-row full"><div class="f-grp"><label>Business name</label><input type="text" id="p-name" placeholder="SK HomeCare Appliance Service"></div></div>
+          <div class="form-row full"><div class="f-grp"><label>Address</label><input type="text" id="p-addr" placeholder="Aurangabad, Maharashtra"></div></div>
+          <div class="form-row">
+            <div class="f-grp"><label>Phone</label><input type="text" id="p-phone" placeholder="+91 87936 64463"></div>
+            <div class="f-grp"><label>Email</label><input type="email" id="p-email" placeholder="skhomecareaurangabad@gmail.com"></div>
+          </div>
+          <div class="form-row">
+            <div class="f-grp"><label>GST number (optional)</label><input type="text" id="p-gst" placeholder="Leave blank if not registered"></div>
+            <div class="f-grp"><label>Invoice footer</label><input type="text" id="p-footer" placeholder="Thank you for choosing SK HomeCare!"></div>
+          </div>
+          <button class="btn btn-gd" id="save-profile-btn">Save Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="pane" id="pane-settings">
+      <div class="pane-hd"><h1>Booking Settings</h1><p>Manage working hours, areas and follow-up intervals.</p></div>
+      <div class="card" style="margin-bottom:16px"><div class="card-hd"><h3>Service Hours</h3></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="f-grp"><label>Start time</label><input type="time" id="s-start" value="08:00"></div>
+            <div class="f-grp"><label>End time</label><input type="time" id="s-end" value="20:00"></div>
+          </div>
+          <div class="form-row">
+            <div class="f-grp"><label>Slot interval</label><select id="s-interval"><option value="1">Every 1 hour</option><option value="2">Every 2 hours</option></select></div>
+            <div class="f-grp"><label>Max days ahead</label><input type="number" id="s-maxdays" value="30" min="1" max="90"></div>
+          </div>
+          <div class="form-row full"><div class="f-grp"><label>WhatsApp number</label><input type="text" id="s-wa" placeholder="+918793664463"></div></div>
+          <button class="btn btn-gd" id="save-settings-btn">Save Settings</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px"><div class="card-hd"><h3>Service Areas</h3></div>
+        <div class="card-body">
+          <div class="f-grp"><label>Areas (one per line)</label><textarea id="s-areas" style="min-height:140px"></textarea></div>
+          <button class="btn btn-gd" id="save-areas-btn" style="margin-top:10px">Save Areas</button>
+        </div>
+      </div>
+      <div class="card"><div class="card-hd"><h3>Follow-up Intervals (days)</h3></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="f-grp"><label>AC Normal Wash</label><input type="number" id="fu-acwash" value="90" min="1"></div>
+            <div class="f-grp"><label>AC Deep Wash</label><input type="number" id="fu-acdeep" value="365" min="1"></div>
+          </div>
+          <div class="form-row">
+            <div class="f-grp"><label>AC Gas Refilling</label><input type="number" id="fu-acgas" value="365" min="1"></div>
+            <div class="f-grp"><label>AC Installation</label><input type="number" id="fu-acinst" value="365" min="1"></div>
+          </div>
+          <div class="form-row">
+            <div class="f-grp"><label>Geyser Service</label><input type="number" id="fu-gey" value="365" min="1"></div>
+            <div class="f-grp"><label>Default (all others)</label><input type="number" id="fu-def" value="180" min="1"></div>
+          </div>
+          <div class="form-row full"><div class="f-grp"><label>Follow-up WhatsApp template</label><textarea id="fu-template" style="min-height:76px" placeholder="Hello {name}, it has been {days} days since your {service}..."></textarea><div class="hint">Use {name}, {days}, {service} as placeholders.</div></div></div>
+          <button class="btn btn-gd" id="save-fu-btn" style="margin-top:10px">Save Follow-up Settings</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- SERVICE MODAL -->
+<div class="mo" id="svc-mo">
+  <div class="mo-box">
+    <h3 id="svc-mo-title">Add Service</h3>
+    <div class="form-row">
+      <div class="f-grp"><label>Icon (emoji)</label><input type="text" id="m-icon" placeholder="❄️" maxlength="4"></div>
+      <div class="f-grp"><label>Category</label><select id="m-cat"><option value="ac">Air Conditioner</option><option value="other">Other Appliances</option></select></div>
+    </div>
+    <div class="form-row full"><div class="f-grp"><label>Service name</label><input type="text" id="m-name"></div></div>
+    <div class="form-row full"><div class="f-grp"><label>Short description</label><textarea id="m-desc"></textarea></div></div>
+    <div class="form-row">
+      <div class="f-grp"><label>Price (e.g. ₹900)</label><input type="text" id="m-price"></div>
+      <div class="f-grp"><label>Price prefix</label><input type="text" id="m-prefix" placeholder="From or leave blank"></div>
+    </div>
+    <div class="form-row">
+      <div class="f-grp"><label>Sort order</label><input type="number" id="m-sort" value="0" min="0"></div>
+      <div class="f-grp"><label>Status</label><select id="m-active"><option value="true">Active</option><option value="false">Hidden</option></select></div>
+    </div>
+    <input type="hidden" id="m-id">
+    <div class="mo-foot"><button class="btn btn-ol" onclick="closeMo('svc-mo')">Cancel</button><button class="btn btn-gd" id="svc-mo-save">Save</button></div>
+  </div>
+</div>
+
+<!-- FAQ MODAL -->
+<div class="mo" id="faq-mo">
+  <div class="mo-box">
+    <h3 id="faq-mo-title">Add FAQ</h3>
+    <div class="form-row full"><div class="f-grp"><label>Question</label><input type="text" id="fm-q"></div></div>
+    <div class="form-row full"><div class="f-grp"><label>Answer</label><textarea id="fm-a" style="min-height:100px"></textarea></div></div>
+    <div class="form-row">
+      <div class="f-grp"><label>Sort order</label><input type="number" id="fm-sort" value="0"></div>
+      <div class="f-grp"><label>Status</label><select id="fm-active"><option value="true">Active</option><option value="false">Hidden</option></select></div>
+    </div>
+    <input type="hidden" id="fm-id">
+    <div class="mo-foot"><button class="btn btn-ol" onclick="closeMo('faq-mo')">Cancel</button><button class="btn btn-gd" id="faq-mo-save">Save</button></div>
+  </div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div class="mo" id="rv-mo">
+  <div class="mo-box">
+    <h3 id="rv-mo-title">Add Review</h3>
+    <div class="form-row">
+      <div class="f-grp"><label>Customer name</label><input type="text" id="rv-name" placeholder="e.g. Rahul S."></div>
+      <div class="f-grp"><label>Area</label><input type="text" id="rv-area" placeholder="e.g. Cidco"></div>
+    </div>
+    <div class="form-row full">
+      <div class="f-grp"><label>Rating (1-5)</label>
+        <select id="rv-rating"><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ (4)</option><option value="3">★★★☆☆ (3)</option><option value="2">★★☆☆☆ (2)</option><option value="1">★☆☆☆☆ (1)</option></select>
+      </div>
+    </div>
+    <div class="form-row full"><div class="f-grp"><label>Review text</label><textarea id="rv-text" style="min-height:80px" placeholder="What the customer said..."></textarea></div></div>
+    <div class="form-row">
+      <div class="f-grp"><label>Sort order</label><input type="number" id="rv-sort" value="0"></div>
+      <div class="f-grp"><label>Status</label><select id="rv-active"><option value="true">Active (visible)</option><option value="false">Hidden</option></select></div>
+    </div>
+    <input type="hidden" id="rv-id">
+    <div class="mo-foot"><button class="btn btn-ol" onclick="closeMo('rv-mo')">Cancel</button><button class="btn btn-gd" id="rv-mo-save">Save</button></div>
+  </div>
+</div>
+
+<!-- BOOKING NOTES MODAL -->
+<div class="mo" id="notes-mo">
+  <div class="mo-box">
+    <h3>Booking Details &amp; Notes</h3>
+    <div id="nm-details" style="background:var(--iv2);border-radius:9px;padding:14px;margin-bottom:14px;font-size:.84rem;line-height:1.9"></div>
+    <div class="f-grp"><label>Admin notes</label><textarea id="nm-notes" style="min-height:80px"></textarea></div>
+    <div class="mo-foot"><button class="btn btn-ol" onclick="closeMo('notes-mo')">Cancel</button><button class="btn btn-gd" id="nm-save">Save Notes</button></div>
+    <input type="hidden" id="nm-id">
+  </div>
+</div>
+
+<!-- INVOICE EDITOR MODAL -->
+<div class="mo" id="inv-mo">
+  <div class="mo-box wide">
+    <h3 id="inv-mo-title">New Invoice</h3>
+    <div class="form-row">
+      <div class="f-grp"><label>Invoice #</label><input type="text" id="inv-no" readonly style="background:var(--iv3);color:var(--mu)"></div>
+      <div class="f-grp"><label>Date</label><input type="date" id="inv-date"></div>
+    </div>
+    <div class="form-row full"><div class="f-grp"><label>Customer name</label><input type="text" id="inv-cname" placeholder="Customer name"></div></div>
+    <div class="form-row">
+      <div class="f-grp"><label>Phone</label><input type="tel" id="inv-cphone" placeholder="10-digit"></div>
+      <div class="f-grp"><label>Address</label><input type="text" id="inv-caddr" placeholder="Address or landmark"></div>
+    </div>
+    <!-- Invoice template choices -->
+    <div class="form-row full" style="margin-top:4px"><div class="f-grp"><label for="inv-template">Invoice design</label><select id="inv-template"><option value="minimal-beige">Minimal Beige — reference style</option><option value="sk-gold">SK Gold</option><option value="modern-navy">Modern Navy</option><option value="classic-clean">Classic Clean</option><option value="soft-sage">Soft Sage</option></select><div class="hint">Choose a design for this invoice. You can change it later.</div></div></div>
+    <!-- Line items -->
+    <div style="font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:14px 0 6px">Line Items</div>
+    <table class="inv-items-tbl" id="inv-items-tbl">
+      <thead><tr><th style="width:50%">Description</th><th style="width:12%">Qty</th><th style="width:16%">Rate (₹)</th><th style="width:16%">Amount (₹)</th><th style="width:6%"></th></tr></thead>
+      <tbody id="inv-items-body"></tbody>
+    </table>
+    <button class="btn btn-ol btn-sm" onclick="addInvItem()">+ Add line item</button>
+    <!-- Totals -->
+    <div class="form-row" style="margin-top:14px">
+      <div class="f-grp"><label>Discount (₹)</label><input type="number" id="inv-disc" value="0" min="0" oninput="calcTotals()"></div>
+      <div class="f-grp">
+        <label><input type="checkbox" id="inv-gst-on" onchange="calcTotals()" style="width:auto;margin-right:6px">Enable GST</label>
+        <div style="display:flex;gap:7px;align-items:center;margin-top:6px">
+          <input type="number" id="inv-gst-pct" value="18" min="0" max="100" style="width:80px" oninput="calcTotals()">
+          <span style="font-size:.84rem;color:var(--md)">%</span>
+        </div>
+      </div>
+    </div>
+    <div class="inv-summary" id="inv-summary"></div>
+    <div class="form-row" style="margin-top:12px">
+      <div class="f-grp"><label>Payment status</label><select id="inv-status"><option value="unpaid">Unpaid</option><option value="paid">Paid</option></select></div>
+      <div class="f-grp"><label>Notes (optional)</label><input type="text" id="inv-notes" placeholder="Any additional notes"></div>
+    </div>
+    <input type="hidden" id="inv-id">
+    <input type="hidden" id="inv-bk-id">
+    <div class="mo-foot" style="flex-wrap:wrap;gap:7px">
+      <button class="btn btn-ol" onclick="closeMo('inv-mo')">Cancel</button>
+      <button class="btn btn-ol" onclick="printInvoice()">🖨 Print / PDF</button>
+      <button class="btn btn-ol" onclick="downloadInvoicePdf()">&#8595; Download PDF</button>
+      <button class="btn btn-ol" onclick="waInvoice()">💬 WhatsApp</button>
+      <button class="btn btn-gd" id="inv-save-btn">Save Invoice</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOMER HISTORY MODAL -->
+<div class="mo" id="cust-mo">
+  <div class="mo-box wide">
+    <h3 id="cust-mo-title">Customer History</h3>
+    <div id="cust-mo-body" style="font-size:.86rem"></div>
+    <div class="mo-foot"><button class="btn btn-ol" onclick="closeMo('cust-mo')">Close</button></div>
+  </div>
+</div>
+
+<!-- PRINTABLE INVOICE -->
+<div id="invoice-print-area" class="ip-print inv-theme-minimal-beige">
+  <div class="ip-header">
+    <div class="ip-meta"><h1>Invoice</h1></div>
+    <div class="ip-meta"><p>Invoice No: <span id="ip-inv-no"></span></p><p>Date: <span id="ip-inv-date"></span></p><div id="ip-status-badge"></div></div>
+  </div>
+  <div class="ip-parties">
+    <div>
+      <div class="ip-party"><h4>Billed To:</h4><p id="ip-cust"></p></div>
+      <div class="ip-party"><h4>From:</h4><p id="ip-from"></p></div>
+    </div>
+    <div class="ip-logo-stack"><div class="ip-logo-seal"><img id="ip-logo" class="ip-logo" style="display:none" alt="SK Home Care logo"><span class="ip-logo-fallback" id="ip-logo-fallback">SK</span></div><div class="ip-logo-name">SK Home Care</div></div>
+  </div>
+  <table class="ip-items"><thead><tr><th>Description</th><th style="text-align:right;width:100px">Unit Price</th><th style="text-align:right;width:55px">Qty</th><th style="text-align:right;width:100px">Total</th></tr></thead><tbody id="ip-items"></tbody></table>
+  <div class="ip-totals"><div class="ip-totals-inner" id="ip-totals"></div></div>
+  <div class="ip-footer"><div class="ip-payment"><h4>Payment / Questions</h4><p id="ip-payment-details"></p></div><div class="ip-thanks"><strong>Thank you!</strong><span id="ip-footer"></span></div></div>
+</div>
+
+<div id="toast"></div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"></script>
+<script>
+
+var SUPABASE_URL='https://eruuqtilpxxfbofepnxm.supabase.co';
+var SUPABASE_ANON_KEY='sb_publishable_3VjY8RnP6y9dtVhcCYeGWQ_9KKNlDi6';
+var CONFIGURED=SUPABASE_URL!=='YOUR_SUPABASE_URL';
+var sb=null;
+if(CONFIGURED&&window.supabase)sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');}
+function toast(m,t){t=t||'ok';var el=document.createElement('div');el.className='ti '+t;el.textContent=m;document.getElementById('toast').appendChild(el);setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},3500);}
+function openMo(id){document.getElementById(id).classList.add('show');}
+function closeMo(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.mo').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)m.classList.remove('show');});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.mo.show').forEach(function(m){m.classList.remove('show');});});
+
+function goPane(id){
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.sb-link').forEach(function(l){l.classList.remove('on');});
+  var el=document.getElementById('pane-'+id);if(el)el.classList.add('on');
+  var lk=document.querySelector('[data-pane="'+id+'"]');if(lk)lk.classList.add('on');
+  var map={overview:loadOverview,services:loadServices,gallery:loadGallery,'before-after':loadBA,
+    reviews:loadReviews,content:loadContent,faqs:loadFAQs,bookings:loadBookings,
+    invoices:loadInvoices,customers:loadCustomers,followups:loadFollowUps,profile:loadProfile,settings:loadSettings};
+  if(map[id])map[id]();
+}
+document.querySelectorAll('.sb-link').forEach(function(lk){lk.addEventListener('click',function(){goPane(lk.dataset.pane);});});
+
+function showLogin(){document.getElementById('login-screen').style.display='flex';document.getElementById('app').classList.remove('show');}
+async function showApp(email){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').classList.add('show');
+  document.getElementById('sb-user-email').textContent=email||'';
+  await loadSidebarLogo();
+  loadOverview();loadFollowUpBadge();
+}
+document.getElementById('l-btn').addEventListener('click',async function(){
+  if(!CONFIGURED){document.getElementById('l-err').textContent='Supabase not configured.';return;}
+  if(!sb){document.getElementById('l-err').textContent='Supabase client failed to load.';return;}
+  var email=document.getElementById('l-email').value.trim(),pass=document.getElementById('l-pass').value;
+  if(!email||!pass){document.getElementById('l-err').textContent='Please enter email and password.';return;}
+  this.disabled=true;this.innerHTML='<span class="spin"></span>';
+  var r=await sb.auth.signInWithPassword({email:email,password:pass});
+  this.disabled=false;this.textContent='Sign In';
+  if(r.error){document.getElementById('l-err').textContent=r.error.message;return;}
+  var uid=r.data.user.id;
+  var ar=await sb.from('admin_users').select('user_id').eq('user_id',uid).single();
+  if(ar.error||!ar.data){await sb.auth.signOut();document.getElementById('l-err').textContent='Not authorised. This account does not have admin access.';return;}
+  showApp(email);
+});
+['l-email','l-pass'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter'){if(id==='l-email')document.getElementById('l-pass').focus();else document.getElementById('l-btn').click();}});});
+document.getElementById('logout-btn').addEventListener('click',async function(){if(sb)await sb.auth.signOut();showLogin();});
+(async function(){
+  if(!CONFIGURED||!sb){showLogin();return;}
+  var s=await sb.auth.getSession();
+  if(s.data&&s.data.session&&s.data.session.user){
+    var uid=s.data.session.user.id;
+    var ar=await sb.from('admin_users').select('user_id').eq('user_id',uid).single();
+    if(ar.data)showApp(s.data.session.user.email);else{await sb.auth.signOut();showLogin();}
+  }else showLogin();
+})();
+
+async function loadSidebarLogo(){
+  if(!sb)return;
+  try{var r=await sb.from('business_profile').select('business_name,address,phone,email,gst_number,invoice_footer,logo_url').single();
+    if(r.data){profileCache=Object.assign({},profileCache,r.data);if(r.data.logo_url){
+      ['sb-logo-img','login-logo-wrap'].forEach(function(id){var w=document.getElementById(id);if(w)w.innerHTML='<img src="'+esc(r.data.logo_url)+'" alt="logo" style="width:100%;height:100%;object-fit:cover">';});
+    }}
+  }catch(e){}
+}
+
+
+async function loadOverview(){
+  if(!CONFIGURED){document.getElementById('cfg-banner-wrap').innerHTML='<div class="cfg-banner"><strong>Supabase not configured.</strong> Open admin.html, set SUPABASE_URL and SUPABASE_ANON_KEY, then run supabase-setup.sql.</div>';document.getElementById('st-src').textContent='Not configured';return;}
+  document.getElementById('st-src').textContent='Supabase OK';
+  var today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+  var firstDay=new Date();firstDay.setDate(1);var fd=firstDay.toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+  try{
+    var res=await Promise.all([sb.from('bookings').select('id',{count:'exact',head:true}).eq('booking_date',today),sb.from('bookings').select('id',{count:'exact',head:true}).eq('status','pending'),sb.from('follow_ups').select('id',{count:'exact',head:true}).eq('status','active').lte('due_date',today),sb.from('invoices').select('total').eq('payment_status','paid').gte('issue_date',fd),sb.from('invoices').select('total').eq('payment_status','unpaid'),sb.from('bookings').select('phone'),sb.from('services').select('id',{count:'exact',head:true})]);
+    var ids=['st-today','st-pending','st-fu'];
+    ids.forEach(function(id,i){document.getElementById(id).textContent=res[i].count||'0';});
+    document.getElementById('st-rev').textContent='₹'+((res[3].data||[]).reduce(function(s,r){return s+(parseFloat(r.total)||0);},0)).toLocaleString('en-IN');
+    document.getElementById('st-cust').textContent=new Set((res[5].data||[]).map(function(r){return r.phone;})).size;
+    document.getElementById('st-unpaid').textContent='₹'+((res[4].data||[]).reduce(function(s,r){return s+(parseFloat(r.total)||0);},0)).toLocaleString('en-IN');
+    document.getElementById('st-svcs').textContent=res[6].count||'0';
+    var fuBadge=document.getElementById('fu-badge');
+    if(fuBadge&&res[2].count>0){fuBadge.style.display='';fuBadge.textContent=res[2].count;}
+  }catch(e){toast('Overview error: '+e.message,'err');}
+}
+
+var svcCache=[];
+async function loadServices(){
+  document.getElementById('svc-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--mu)">Loading...</td></tr>';
+  if(!sb){toast('Not configured','info');return;}
+  var r=await sb.from('services').select('*').order('sort_order');
+  if(r.error){toast('Error: '+r.error.message,'err');return;}
+  svcCache=r.data||[];
+  if(!svcCache.length){document.getElementById('svc-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--mu)">No services yet.</td></tr>';return;}
+  document.getElementById('svc-tbody').innerHTML=svcCache.map(function(s){
+    var price=(s.price_prefix?s.price_prefix+' ':'')+s.price;
+    return '<tr><td>'+esc(s.icon||'')+'</td><td><strong>'+esc(s.name)+'</strong></td><td>'+esc(price)+'</td><td>'+(s.category==='ac'?'AC':'Other')+'</td><td><span class="badge '+(s.active?'badge-green':'badge-red')+'">'+(s.active?'Active':'Hidden')+'</span></td><td><div class="acts"><button class="btn-icon admin-action" data-action="edit-svc" data-id="'+esc(s.id)+'">Edit</button><button class="btn-icon red admin-action" data-action="del-svc" data-id="'+esc(s.id)+'" data-name="'+esc(s.name)+'">Del</button></div></td></tr>';
+  }).join('');
+}
+document.getElementById('add-svc-btn').addEventListener('click',function(){
+  document.getElementById('svc-mo-title').textContent='Add Service';
+  ['m-id','m-icon','m-name','m-desc','m-price','m-prefix'].forEach(function(i){document.getElementById(i).value='';});
+  document.getElementById('m-sort').value='0';document.getElementById('m-active').value='true';document.getElementById('m-cat').value='ac';
+  openMo('svc-mo');
+});
+function editSvc(id){
+  var s=svcCache.find(function(x){return x.id===id;});if(!s)return;
+  document.getElementById('svc-mo-title').textContent='Edit Service';
+  document.getElementById('m-id').value=s.id;document.getElementById('m-icon').value=s.icon||'';document.getElementById('m-cat').value=s.category||'ac';document.getElementById('m-name').value=s.name||'';document.getElementById('m-desc').value=s.description||'';document.getElementById('m-price').value=s.price||'';document.getElementById('m-prefix').value=s.price_prefix||'';document.getElementById('m-sort').value=s.sort_order||0;document.getElementById('m-active').value=s.active?'true':'false';
+  openMo('svc-mo');
+}
+document.getElementById('svc-mo-save').addEventListener('click',async function(){
+  var id=document.getElementById('m-id').value;
+  var d={icon:document.getElementById('m-icon').value.trim(),name:document.getElementById('m-name').value.trim(),description:document.getElementById('m-desc').value.trim(),price:document.getElementById('m-price').value.trim(),price_prefix:document.getElementById('m-prefix').value.trim(),category:document.getElementById('m-cat').value,sort_order:parseInt(document.getElementById('m-sort').value)||0,active:document.getElementById('m-active').value==='true'};
+  if(!d.name||!d.price){toast('Name and price required','err');return;}
+  if(!sb)return;this.disabled=true;
+  var r=id?await sb.from('services').update(d).eq('id',id):await sb.from('services').insert(d);
+  this.disabled=false;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  toast(id?'Updated.':'Added.','ok');closeMo('svc-mo');loadServices();
+});
+
+async function compressImage(file,maxW){
+  return new Promise(function(resolve){
+    var img=new Image();var url=URL.createObjectURL(file);
+    img.onload=function(){var w=Math.min(img.width,maxW||1600);var h=img.height*(w/img.width);var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(function(b){URL.revokeObjectURL(url);resolve(b);},'image/jpeg',0.82);};
+    img.src=url;
+  });
+}
+
+var galCache=[];var uploadBlob=null;
+document.getElementById('gal-file').addEventListener('change',async function(){
+  if(!this.files||!this.files[0])return;
+  uploadBlob=await compressImage(this.files[0],1600);
+  var reader=new FileReader();reader.onload=function(e){document.getElementById('gal-prev-img').src=e.target.result;document.getElementById('gal-preview').style.display='';};reader.readAsDataURL(uploadBlob);
+});
+document.getElementById('gal-cancel-btn').addEventListener('click',function(){uploadBlob=null;document.getElementById('gal-preview').style.display='none';document.getElementById('gal-file').value='';document.getElementById('gal-cap').value='';});
+document.getElementById('gal-upload-btn').addEventListener('click',async function(){
+  if(!uploadBlob||!sb)return;
+  var cap=document.getElementById('gal-cap').value.trim();var path='gallery-'+Date.now()+'.jpg';
+  this.disabled=true;this.innerHTML='<span class="spin"></span>';
+  var up=await sb.storage.from('gallery').upload(path,uploadBlob,{contentType:'image/jpeg',upsert:false});
+  if(up.error){this.disabled=false;this.textContent='Upload';toast('Upload error: '+up.error.message,'err');return;}
+  var pubUrl=sb.storage.from('gallery').getPublicUrl(path).data.publicUrl;
+  var ins=await sb.from('gallery').insert({storage_path:path,public_url:pubUrl,caption:cap,sort_order:galCache.length});
+  this.disabled=false;this.textContent='Upload';if(ins.error){toast('DB error: '+ins.error.message,'err');return;}
+  toast('Uploaded.','ok');document.getElementById('gal-cancel-btn').click();loadGallery();
+});
+async function loadGallery(){
+  if(!sb){document.getElementById('gal-mgr').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">Connect Supabase to manage gallery.</p>';return;}
+  var r=await sb.from('gallery').select('*').order('sort_order');if(r.error){toast('Error: '+r.error.message,'err');return;}
+  galCache=r.data||[];document.getElementById('gal-count').textContent=r.data.length+' image'+(r.data.length!==1?'s':'');
+  if(!r.data.length){document.getElementById('gal-mgr').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">No images yet.</p>';return;}
+  document.getElementById('gal-mgr').innerHTML=r.data.map(function(img){return '<div class="gal-card"><img src="'+esc(img.public_url)+'" alt="'+esc(img.caption)+'" loading="lazy"><div class="gal-card-info"><div class="gal-card-cap">'+esc(img.caption||'No caption')+'</div><div class="gal-card-acts"><button class="btn btn-sm btn-ol admin-action" data-action="edit-cap" data-id="'+esc(img.id)+'" data-cap="'+esc(img.caption)+'">Caption</button><button class="btn btn-sm btn-red admin-action" data-action="del-gal" data-id="'+esc(img.id)+'" data-path="'+esc(img.storage_path)+'">Delete</button></div></div></div>';}).join('');
+}
+
+var baBeforeBlob=null;var baAfterBlob=null;
+function setupBA(fileId,prevId,setter){
+  document.getElementById(fileId).addEventListener('change',async function(){
+    if(!this.files||!this.files[0])return;var blob=await compressImage(this.files[0],1600);setter(blob);
+    var reader=new FileReader();reader.onload=function(e){var el=document.getElementById(prevId);el.src=e.target.result;el.style.display='';};reader.readAsDataURL(blob);
+    document.getElementById('ba-upload-btn').disabled=!baBeforeBlob||!baAfterBlob;
+  });
+}
+setupBA('ba-before-file','ba-before-prev',function(b){baBeforeBlob=b;});
+setupBA('ba-after-file','ba-after-prev',function(b){baAfterBlob=b;});
+document.getElementById('ba-upload-btn').addEventListener('click',async function(){
+  if(!baBeforeBlob||!baAfterBlob||!sb)return;
+  var cap=document.getElementById('ba-cap').value.trim();var ts=Date.now();
+  this.disabled=true;this.innerHTML='<span class="spin"></span>';
+  var bp='before_after/before-'+ts+'.jpg',ap='before_after/after-'+ts+'.jpg';
+  var r1=await sb.storage.from('gallery').upload(bp,baBeforeBlob,{contentType:'image/jpeg'});
+  var r2=await sb.storage.from('gallery').upload(ap,baAfterBlob,{contentType:'image/jpeg'});
+  if(r1.error||r2.error){this.disabled=false;this.textContent='Upload Pair';toast('Upload error','err');return;}
+  var bUrl=sb.storage.from('gallery').getPublicUrl(bp).data.publicUrl;
+  var aUrl=sb.storage.from('gallery').getPublicUrl(ap).data.publicUrl;
+  var ins=await sb.from('before_after').insert({before_path:bp,before_url:bUrl,after_path:ap,after_url:aUrl,caption:cap});
+  this.disabled=false;this.textContent='Upload Pair';if(ins.error){toast('DB error: '+ins.error.message,'err');return;}
+  toast('Pair uploaded.','ok');baBeforeBlob=null;baAfterBlob=null;document.getElementById('ba-cap').value='';
+  ['ba-before-prev','ba-after-prev'].forEach(function(id){var el=document.getElementById(id);el.src='';el.style.display='none';});
+  loadBA();
+});
+async function loadBA(){
+  if(!sb){document.getElementById('ba-pairs').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">Connect Supabase.</p>';return;}
+  var r=await sb.from('before_after').select('*').order('sort_order');if(r.error){toast('Error: '+r.error.message,'err');return;}
+  document.getElementById('ba-count').textContent=r.data.length+' pair'+(r.data.length!==1?'s':'');
+  if(!r.data.length){document.getElementById('ba-pairs').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">No pairs yet.</p>';return;}
+  document.getElementById('ba-pairs').innerHTML=r.data.map(function(p){return '<div class="ba-pair-card"><div class="ba-pair-imgs"><img src="'+esc(p.before_url)+'" alt="Before"><img src="'+esc(p.after_url)+'" alt="After"></div><div class="ba-pair-info"><span style="font-size:.8rem;color:var(--md)">'+esc(p.caption||'No caption')+'</span><div style="display:flex;gap:5px;align-items:center"><span class="badge '+(p.active?'badge-green':'badge-red')+'">'+(p.active?'Active':'Hidden')+'</span><button class="btn-icon admin-action" data-action="toggle-ba" data-id="'+esc(p.id)+'" data-active="'+(p.active?'true':'false')+'">'+(p.active?'Hide':'Show')+'</button><button class="btn-icon red admin-action" data-action="del-ba" data-id="'+esc(p.id)+'" data-bp="'+esc(p.before_path)+'" data-ap="'+esc(p.after_path)+'">Del</button></div></div></div>';}).join('');
+}
+
+
+var rvCache=[];
+async function loadReviews(){
+  document.getElementById('rv-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--mu)">Loading...</td></tr>';
+  if(!sb)return;
+  var r=await sb.from('reviews').select('*').order('sort_order');
+  if(r.error){toast('Error: '+r.error.message,'err');return;}
+  rvCache=r.data||[];
+  if(!rvCache.length){document.getElementById('rv-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--mu)">No reviews yet.</td></tr>';return;}
+  document.getElementById('rv-tbody').innerHTML=rvCache.map(function(rv){
+    var stars='';for(var i=0;i<5;i++)stars+=(i<rv.rating?'&#9733;':'&#9734;');
+    return '<tr><td><strong>'+esc(rv.name)+'</strong></td><td>'+esc(rv.area)+'</td><td style="color:var(--gd)">'+stars+'</td><td style="font-size:.8rem;color:var(--md)">'+esc((rv.text||'').substring(0,70))+'...</td><td><span class="badge '+(rv.active?'badge-green':'badge-red')+'">'+(rv.active?'Active':'Hidden')+'</span></td><td><div class="acts"><button class="btn-icon admin-action" data-action="edit-rv" data-id="'+esc(rv.id)+'">Edit</button><button class="btn-icon red admin-action" data-action="del-rv" data-id="'+esc(rv.id)+'">Del</button></div></td></tr>';
+  }).join('');
+}
+document.getElementById('add-rv-btn').addEventListener('click',function(){
+  document.getElementById('rv-mo-title').textContent='Add Review';
+  ['rv-id','rv-name','rv-area','rv-text'].forEach(function(i){document.getElementById(i).value='';});
+  document.getElementById('rv-rating').value='5';document.getElementById('rv-sort').value='0';document.getElementById('rv-active').value='true';
+  openMo('rv-mo');
+});
+function editRv(id){
+  var rv=rvCache.find(function(x){return x.id===id;});if(!rv)return;
+  document.getElementById('rv-mo-title').textContent='Edit Review';
+  document.getElementById('rv-id').value=rv.id;document.getElementById('rv-name').value=rv.name||'';document.getElementById('rv-area').value=rv.area||'';document.getElementById('rv-rating').value=rv.rating||5;document.getElementById('rv-text').value=rv.text||'';document.getElementById('rv-sort').value=rv.sort_order||0;document.getElementById('rv-active').value=rv.active?'true':'false';
+  openMo('rv-mo');
+}
+document.getElementById('rv-mo-save').addEventListener('click',async function(){
+  var id=document.getElementById('rv-id').value;
+  var d={name:document.getElementById('rv-name').value.trim(),area:document.getElementById('rv-area').value.trim(),rating:parseInt(document.getElementById('rv-rating').value),text:document.getElementById('rv-text').value.trim(),sort_order:parseInt(document.getElementById('rv-sort').value)||0,active:document.getElementById('rv-active').value==='true'};
+  if(!d.name||!d.text){toast('Name and review text required','err');return;}
+  if(!sb)return;this.disabled=true;
+  var r=id?await sb.from('reviews').update(d).eq('id',id):await sb.from('reviews').insert(d);
+  this.disabled=false;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  toast(id?'Updated.':'Added.','ok');closeMo('rv-mo');loadReviews();
+});
+
+var CONTENT_SCHEMA=[{section:'Hero',items:[{key:'hero_heading',label:'Hero heading'},{key:'hero_subtext',label:'Hero subtext'}]},{section:'Annual Plan',items:[{key:'annual_plan_price',label:'Annual plan price'},{key:'annual_plan_desc',label:'Annual plan description'}]},{section:'Buttons',items:[{key:'book_btn_text',label:'Main Book button text'}]},{section:'Sections',items:[{key:'services_heading',label:'Services heading'},{key:'gallery_heading',label:'Gallery heading'},{key:'gallery_subtext',label:'Gallery subtext'}]}];
+var contentCache={};
+async function loadContent(){
+  var wrap=document.getElementById('content-sections');
+  if(!sb){wrap.innerHTML='<div class="cfg-banner">Connect Supabase to edit website text.</div>';return;}
+  var r=await sb.from('site_content').select('*');if(r.error){toast('Error: '+r.error.message,'err');return;}
+  r.data.forEach(function(row){contentCache[row.key]=row;});
+  wrap.innerHTML=CONTENT_SCHEMA.map(function(sec){
+    return '<div class="card" style="margin-bottom:14px"><div class="card-hd"><h3>'+esc(sec.section)+'</h3></div><div class="card-body">'+sec.items.map(function(item){var val=contentCache[item.key]?contentCache[item.key].value:'';return '<div class="f-grp" style="margin-bottom:12px"><label>'+esc(item.label)+'</label><input type="text" class="ci" data-key="'+esc(item.key)+'" value="'+esc(val)+'"></div>';}).join('')+'<button class="btn btn-gd save-ci" data-section="'+esc(sec.section)+'">Save '+esc(sec.section)+'</button></div></div>';
+  }).join('');
+  wrap.querySelectorAll('.save-ci').forEach(function(btn){
+    btn.addEventListener('click',async function(){
+      var sec=btn.dataset.section;var inputs=btn.closest('.card').querySelectorAll('.ci');
+      btn.disabled=true;btn.innerHTML='<span class="spin"></span>';
+      for(var i=0;i<inputs.length;i++)await sb.from('site_content').upsert({key:inputs[i].dataset.key,value:inputs[i].value.trim()},{onConflict:'key'});
+      btn.disabled=false;btn.textContent='Save '+sec;toast(sec+' saved.','ok');
+    });
+  });
+}
+
+var faqCache=[];
+async function loadFAQs(){
+  document.getElementById('faq-tbody').innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--mu)">Loading...</td></tr>';
+  if(!sb)return;
+  var r=await sb.from('faqs').select('*').order('sort_order');if(r.error){toast('Error: '+r.error.message,'err');return;}
+  faqCache=r.data||[];
+  if(!faqCache.length){document.getElementById('faq-tbody').innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--mu)">No FAQs yet.</td></tr>';return;}
+  document.getElementById('faq-tbody').innerHTML=faqCache.map(function(f,i){
+    return '<tr><td style="color:var(--mu);font-size:.8rem">'+(i+1)+'</td><td><strong>'+esc(f.question)+'</strong></td><td><span class="badge '+(f.active?'badge-green':'badge-red')+'">'+(f.active?'Active':'Hidden')+'</span></td><td><div class="acts"><button class="btn-icon admin-action" data-action="edit-faq" data-id="'+esc(f.id)+'">Edit</button><button class="btn-icon red admin-action" data-action="del-faq" data-id="'+esc(f.id)+'">Del</button></div></td></tr>';
+  }).join('');
+}
+document.getElementById('add-faq-btn').addEventListener('click',function(){
+  document.getElementById('faq-mo-title').textContent='Add FAQ';
+  ['fm-id','fm-q','fm-a'].forEach(function(i){document.getElementById(i).value='';});
+  document.getElementById('fm-sort').value=String(faqCache.length);document.getElementById('fm-active').value='true';
+  openMo('faq-mo');
+});
+function editFaq(id){
+  var f=faqCache.find(function(x){return x.id===id;});if(!f)return;
+  document.getElementById('faq-mo-title').textContent='Edit FAQ';
+  document.getElementById('fm-id').value=f.id;document.getElementById('fm-q').value=f.question||'';document.getElementById('fm-a').value=f.answer||'';document.getElementById('fm-sort').value=f.sort_order||0;document.getElementById('fm-active').value=f.active?'true':'false';
+  openMo('faq-mo');
+}
+document.getElementById('faq-mo-save').addEventListener('click',async function(){
+  var id=document.getElementById('fm-id').value;
+  var d={question:document.getElementById('fm-q').value.trim(),answer:document.getElementById('fm-a').value.trim(),sort_order:parseInt(document.getElementById('fm-sort').value)||0,active:document.getElementById('fm-active').value==='true'};
+  if(!d.question||!d.answer){toast('Question and answer required','err');return;}
+  if(!sb)return;this.disabled=true;
+  var r=id?await sb.from('faqs').update(d).eq('id',id):await sb.from('faqs').insert(d);
+  this.disabled=false;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  toast(id?'Updated.':'Added.','ok');closeMo('faq-mo');loadFAQs();
+});
+
+
+var bkAllRows=[];
+var BK_BADGES={pending:'<span class="badge badge-yellow">Pending</span>',confirmed:'<span class="badge badge-green">Confirmed</span>',cancelled:'<span class="badge badge-red">Cancelled</span>',completed:'<span class="badge badge-blue">Completed</span>'};
+async function loadBookings(){
+  document.getElementById('bk-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--mu)">Loading...</td></tr>';
+  if(!sb)return;
+  var q=sb.from('bookings').select('*').order('created_at',{ascending:false});
+  var dt=document.getElementById('bk-filter-dt').value,st=document.getElementById('bk-filter-st').value;
+  if(dt)q=q.eq('booking_date',dt);if(st)q=q.eq('status',st);
+  var r=await q;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  bkAllRows=r.data||[];
+  var search=(document.getElementById('bk-search').value||'').toLowerCase();
+  var rows=search?bkAllRows.filter(function(b){return (b.name||'').toLowerCase().includes(search)||(b.phone||'').includes(search);}):bkAllRows;
+  document.getElementById('bk-count').textContent=rows.length+' booking'+(rows.length!==1?'s':'');
+  renderBkTable(rows);
+}
+document.getElementById('bk-search').addEventListener('input',function(){
+  var q=(this.value||'').toLowerCase();
+  var rows=q?bkAllRows.filter(function(b){return (b.name||'').toLowerCase().includes(q)||(b.phone||'').includes(q);}):bkAllRows;
+  renderBkTable(rows);
+});
+document.getElementById('bk-clear-btn').addEventListener('click',function(){document.getElementById('bk-filter-dt').value='';document.getElementById('bk-filter-st').value='';document.getElementById('bk-search').value='';loadBookings();});
+function renderBkTable(bookings){
+  var tbody=document.getElementById('bk-tbody');
+  if(!bookings.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--mu)">No bookings found.</td></tr>';return;}
+  tbody.innerHTML=bookings.map(function(b){
+    var refId='HC-'+(b.id||'').replace(/-/g,'').substring(0,8).toUpperCase();
+    var dtFmt=b.booking_date||'';try{dtFmt=new Date(b.booking_date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(_){}
+    var tmFmt=b.booking_time||'';try{tmFmt=new Date('2000-01-01T'+b.booking_time).toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true});}catch(_){}
+    var phone=(b.phone||'').replace(/\D/g,'');if(phone.length===10)phone='91'+phone;
+    var badge=BK_BADGES[b.status]||('<span class="badge">'+esc(b.status||'')+'</span>');
+    var waBtn=phone?'<a href="https://wa.me/'+esc(phone)+'" target="_blank" rel="noopener" class="btn btn-sm" style="background:#25D366;color:#fff;border:none">WA</a>':'';
+    var stSel='<select class="bk-st-sel" data-id="'+esc(b.id)+'" style="font-size:.74rem;padding:4px 7px;border-radius:6px;border:1px solid var(--bd);background:var(--iv2)"><option value="">Status</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="cancelled">Cancelled</option><option value="completed">Completed</option></select>';
+    return '<tr><td><code style="font-size:.7rem;color:var(--mu)">'+esc(refId)+'</code></td><td><strong>'+esc(dtFmt)+'</strong><br><small style="color:var(--mu)">'+esc(tmFmt)+'</small></td><td style="font-size:.82rem">'+esc(b.service||'')+'</td><td><strong>'+esc(b.name||'')+'</strong><br><small style="color:var(--mu)">'+esc(b.phone||'')+'</small></td><td style="font-size:.82rem">'+esc(b.area||'')+'</td><td>'+badge+'</td><td><div class="acts">'+waBtn+stSel+'<button class="btn-icon admin-action" data-action="bk-notes" data-id="'+esc(b.id)+'">Notes</button><button class="btn-icon admin-action" data-action="bk-invoice" data-id="'+esc(b.id)+'">Inv</button><button class="btn-icon red admin-action" data-action="del-bk" data-id="'+esc(b.id)+'">Del</button></div></td></tr>';
+  }).join('');
+}
+function dlCSV(csv,filename){
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast('CSV exported.','ok');
+}
+function exportBkCSV(){
+  if(!bkAllRows.length){toast('No bookings','info');return;}
+  var NL=String.fromCharCode(10);
+  var cols=['Ref','Date','Time','Service','Name','Phone','Area','Address','Problem','Status','Notes'];
+  var rows=bkAllRows.map(function(b){var ref='HC-'+(b.id||'').replace(/-/g,'').substring(0,8).toUpperCase();function e(v){return '"'+(v||'').replace(/"/g,'""')+'"';}return [e(ref),e(b.booking_date),e(b.booking_time),e(b.service),e(b.name),e(b.phone),e(b.area),e(b.address),e(b.problem),e(b.status),e(b.notes)].join(',');});
+  dlCSV(cols.map(function(c){return '"'+c+'"';}).join(',')+NL+rows.join(NL),'sk-homecare-bookings-'+new Date().toISOString().split('T')[0]+'.csv');
+}
+async function updateBkStatus(id,status){
+  if(!sb)return;
+  var r=await sb.from('bookings').update({status:status}).eq('id',id);
+  if(r.error){toast('Error: '+r.error.message,'err');return;}
+  toast('Status updated to '+status,'ok');
+  if(status==='completed'){var bk=bkAllRows.find(function(x){return String(x.id)===String(id);});if(bk&&confirm('Create a follow-up reminder for '+bk.name+'?'))await createFollowUp(bk);}
+  loadBookings();loadFollowUpBadge();
+}
+async function createFollowUp(bk){
+  if(!sb)return;
+  try{
+    var sr=await sb.from('booking_settings').select('value').eq('key','followup_intervals').single();
+    var intervals=sr.data?JSON.parse(sr.data.value||'{}'):{};
+    var days=intervals[bk.service]||intervals['default']||180;
+    var due=new Date(bk.booking_date);due.setDate(due.getDate()+days);
+    var fr=await sb.from('follow_ups').upsert({customer_phone:bk.phone,customer_name:bk.name,last_service:bk.service,booking_id:bk.id,completed_date:bk.booking_date,due_date:due.toISOString().split('T')[0],status:'active'},{onConflict:'booking_id'});
+    if(fr.error){toast('Follow-up not saved: '+fr.error.message,'err');return;}
+    toast('Follow-up set','ok');
+  }catch(e){console.info('Follow-up error:',e);}
+}
+async function loadFollowUpBadge(){
+  if(!sb)return;
+  var today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+  var r=await sb.from('follow_ups').select('id',{count:'exact',head:true}).eq('status','active').lte('due_date',today);
+  var badge=document.getElementById('fu-badge');
+  if(badge){if(r.count>0){badge.style.display='';badge.textContent=r.count;}else badge.style.display='none';}
+}
+
+var invCache=[];var invItems=[];
+function calcTotals(){
+  var disc=Math.max(0,parseFloat(document.getElementById('inv-disc').value)||0);
+  var gstOn=document.getElementById('inv-gst-on').checked;
+  var gstPct=gstOn?Math.max(0,parseFloat(document.getElementById('inv-gst-pct').value)||0):0;
+  var subtotal=invItems.reduce(function(s,i){return s+(i.qty*(parseFloat(i.rate)||0));},0);
+  if(disc>subtotal)disc=subtotal;
+  var gstAmt=(subtotal-disc)*gstPct/100;var total=subtotal-disc+gstAmt;
+  document.getElementById('inv-summary').innerHTML='<div class="inv-row"><span>Subtotal</span><span>&#8377;'+subtotal.toFixed(2)+'</span></div>'+(disc>0?'<div class="inv-row"><span>Discount</span><span style="color:var(--green)">&minus;&#8377;'+disc.toFixed(2)+'</span></div>':'')+(gstOn?'<div class="inv-row"><span>GST ('+gstPct+'%)</span><span>&#8377;'+gstAmt.toFixed(2)+'</span></div>':'')+'<div class="inv-row"><span>Total</span><span style="color:var(--gd)">&#8377;'+total.toFixed(2)+'</span></div>';
+  return {subtotal:subtotal,discount:disc,gstPct:gstPct,gstAmt:gstAmt,total:total};
+}
+var invoiceTemplates=['minimal-beige','sk-gold','modern-navy','classic-clean','soft-sage'];
+function validInvoiceTemplate(value){return invoiceTemplates.indexOf(value)>=0?value:'minimal-beige';}
+function getPreferredInvoiceTemplate(){try{return validInvoiceTemplate(localStorage.getItem('skh-invoice-template')||'minimal-beige');}catch(e){return 'minimal-beige';}}
+document.getElementById('inv-template').addEventListener('change',function(){try{localStorage.setItem('skh-invoice-template',validInvoiceTemplate(this.value));}catch(e){}});
+function invSet(i,k,el){var v=parseFloat(el.value);if(!(v>=0))v=0;if(!invItems[i])return;invItems[i][k]=v;var a=document.getElementById('inv-amt-'+i);if(a)a.value=((parseFloat(invItems[i].qty)||0)*(parseFloat(invItems[i].rate)||0)).toFixed(2);calcTotals();}
+function renderInvItems(){
+  document.getElementById('inv-items-body').innerHTML=invItems.map(function(item,i){
+    var q=(item.qty===undefined||item.qty===null||item.qty==='')?1:item.qty;
+    return '<tr><td><input type="text" value="'+esc(item.description||'')+'" oninput="invItems['+i+'].description=this.value" style="width:100%"></td><td><input type="number" value="'+esc(String(q))+'" min="0" step="any" style="width:60px" oninput="invSet('+i+',\'qty\',this)"></td><td><input type="number" value="'+esc(String(item.rate||0))+'" min="0" step="any" oninput="invSet('+i+',\'rate\',this)"></td><td><input type="number" id="inv-amt-'+i+'" value="'+esc(((parseFloat(q)||0)*(parseFloat(item.rate)||0)).toFixed(2))+'" readonly style="background:var(--iv3);width:90px"></td><td><button type="button" onclick="invItems.splice('+i+',1);renderInvItems()" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:1rem;padding:2px 6px" aria-label="Remove line">&times;</button></td></tr>';
+  }).join('');
+  calcTotals();
+}
+function addInvItem(){invItems.push({description:'',qty:1,rate:0});renderInvItems();}
+async function openInvEditor(bkId){
+  invItems=[];document.getElementById('inv-id').value='';document.getElementById('inv-bk-id').value=bkId||'';
+  document.getElementById('inv-mo-title').textContent='New Invoice';
+  document.getElementById('inv-disc').value='0';document.getElementById('inv-gst-on').checked=false;document.getElementById('inv-status').value='unpaid';document.getElementById('inv-notes').value='';
+  document.getElementById('inv-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('inv-template').value=getPreferredInvoiceTemplate();
+  if(bkId&&sb){
+    var bk=bkAllRows.find(function(x){return String(x.id)===String(bkId);});
+    if(bk){
+      document.getElementById('inv-cname').value=bk.name||'';document.getElementById('inv-cphone').value=bk.phone||'';document.getElementById('inv-caddr').value=bk.address||'';
+      var svc=svcCache.find(function(s){return s.name===bk.service;});
+      var rate=svc?parseFloat((svc.price||'').replace(/[^0-9.]/g,''))||0:0;
+      if(bk.service)invItems=[{description:bk.service,qty:1,rate:rate}];
+    }
+  }else{document.getElementById('inv-cname').value='';document.getElementById('inv-cphone').value='';document.getElementById('inv-caddr').value='';}
+  document.getElementById('inv-no').value='';document.getElementById('inv-no').placeholder='Assigned when you save';
+  renderInvItems();calcTotals();openMo('inv-mo');
+}
+document.getElementById('inv-save-btn').addEventListener('click',async function(){
+  var id=document.getElementById('inv-id').value;var totals=calcTotals();
+  var items=invItems.map(function(i){return {description:i.description,qty:i.qty,rate:i.rate,amount:i.qty*(parseFloat(i.rate)||0)};});
+  if(!items.length){toast('Add at least one line item','err');return;}
+  var d={booking_id:document.getElementById('inv-bk-id').value||null,customer_name:document.getElementById('inv-cname').value.trim(),customer_phone:document.getElementById('inv-cphone').value.trim(),customer_address:document.getElementById('inv-caddr').value.trim(),issue_date:document.getElementById('inv-date').value,items:items,subtotal:totals.subtotal,discount:totals.discount,gst_percent:totals.gstPct,gst_amount:totals.gstAmt,total:totals.total,payment_status:document.getElementById('inv-status').value,template_id:validInvoiceTemplate(document.getElementById('inv-template').value),notes:document.getElementById('inv-notes').value.trim()};
+  if(!d.customer_name){toast('Customer name required','err');return;}
+  if(!sb)return;var btn=this;btn.disabled=true;
+  try{
+    var r;
+    if(id){r=await sb.from('invoices').update(d).eq('id',id);}
+    else{r=await sb.from('invoices').insert(d).select('id,invoice_no').single();}
+    if(r.error){toast('Error: '+r.error.message,'err');return;}
+    if(!id&&r.data){document.getElementById('inv-id').value=r.data.id;document.getElementById('inv-no').value=r.data.invoice_no;}
+    toast(id?'Invoice updated.':'Invoice '+(r.data?r.data.invoice_no:'')+' saved.','ok');closeMo('inv-mo');loadInvoices();
+  }catch(e){toast('Could not save invoice: '+(e&&e.message?e.message:e),'err');}
+  finally{btn.disabled=false;}
+});
+function prepareInvoicePrint(){
+  if(!document.getElementById('inv-no').value){toast('Save the invoice first - it gets its number when saved.','info');return false;}
+  var template=validInvoiceTemplate(document.getElementById('inv-template').value);document.getElementById('invoice-print-area').className='ip-print inv-theme-'+template;
+  var totals=calcTotals();var status=document.getElementById('inv-status').value;
+  document.getElementById('ip-inv-no').textContent=document.getElementById('inv-no').value;
+  var issueDate=document.getElementById('inv-date').value;try{issueDate=new Date(issueDate+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'2-digit',year:'numeric'});}catch(_){}
+  document.getElementById('ip-inv-date').textContent=issueDate;
+  document.getElementById('ip-cust').innerHTML=esc(document.getElementById('inv-cname').value)+'<br>'+esc(document.getElementById('inv-cphone').value)+'<br>'+esc(document.getElementById('inv-caddr').value);
+  document.getElementById('ip-status-badge').innerHTML='<div class="ip-status '+(status==='paid'?'paid':'unpaid')+'">'+(status==='paid'?'PAID':'UNPAID')+'</div>';
+  document.getElementById('ip-items').innerHTML=invItems.map(function(i){return '<tr><td>'+esc(i.description)+'</td><td style="text-align:right">&#8377;'+parseFloat(i.rate||0).toFixed(2)+'</td><td style="text-align:right">'+i.qty+'</td><td style="text-align:right">&#8377;'+(i.qty*(parseFloat(i.rate)||0)).toFixed(2)+'</td></tr>';}).join('');
+  var disc=totals.discount>0?'<div class="ip-t-row"><span>Discount</span><span>&minus;&#8377;'+totals.discount.toFixed(2)+'</span></div>':'';
+  var gst=totals.gstPct>0?'<div class="ip-t-row"><span>GST ('+totals.gstPct+'%)</span><span>&#8377;'+totals.gstAmt.toFixed(2)+'</span></div>':'';
+  document.getElementById('ip-totals').innerHTML='<div class="ip-t-row"><span>Subtotal</span><span>&#8377;'+totals.subtotal.toFixed(2)+'</span></div>'+disc+gst+'<div class="ip-t-row"><span>Total</span><span>&#8377;'+totals.total.toFixed(2)+'</span></div>';
+  var pBiz=document.getElementById('p-name');var bizName=(pBiz&&pBiz.value.trim())||profileCache.business_name||'SK HomeCare Appliance Service';
+  var pAddr=document.getElementById('p-addr');var bizAddr=(pAddr&&pAddr.value.trim())||profileCache.address||'Aurangabad, Maharashtra';
+  var pPh=document.getElementById('p-phone');var bizPh=(pPh&&pPh.value.trim())||profileCache.phone||'+91 87936 64463';
+  var pGST=document.getElementById('p-gst');var gstNo=(pGST&&pGST.value.trim())||profileCache.gst_number||'';
+  var pEmail=document.getElementById('p-email');var bizEmail=(pEmail&&pEmail.value.trim())||profileCache.email||'';
+  document.getElementById('ip-from').innerHTML=esc(bizName)+'<br>'+esc(bizAddr)+'<br>'+esc(bizPh)+(bizEmail?'<br>'+esc(bizEmail):'')+(gstNo?'<br>GST: '+esc(gstNo):'');
+  document.getElementById('ip-payment-details').textContent='For payment or billing questions, call or WhatsApp '+bizPh+(bizEmail?' · '+bizEmail:'');
+  var pFt=document.getElementById('p-footer');document.getElementById('ip-footer').textContent=(pFt&&pFt.value.trim())||profileCache.invoice_footer||'Thank you for choosing SK HomeCare!';
+  var lpv=document.getElementById('profile-logo-preview');var ipL=document.getElementById('ip-logo');
+  var invoiceLogo=(lpv&&lpv.src&&lpv.src!==window.location.href)?lpv.src:((profileCache&&profileCache.logo_url)||'');
+  var fallback=document.getElementById('ip-logo-fallback');
+  if(invoiceLogo){ipL.src=invoiceLogo;ipL.style.display='';fallback.style.display='none';}
+  else{ipL.style.display='none';fallback.style.display='';}
+  document.getElementById('invoice-print-area').style.display='block';return true;
+}
+function printInvoice(){
+  if(!prepareInvoicePrint())return;
+  var area=document.getElementById('invoice-print-area');
+  window.addEventListener('afterprint',function(){area.style.display='none';},{once:true});
+  requestAnimationFrame(function(){setTimeout(function(){window.print();},80);});
+}
+function outputSavedInvoice(id,asPdf){
+  var inv=invCache.find(function(x){return String(x.id)===String(id);});
+  if(!inv){toast('Invoice not found. Refresh the invoice list and try again.','err');return;}
+  invItems=(inv.items||[]).map(function(i){return Object.assign({},i);});
+  document.getElementById('inv-no').value=inv.invoice_no||'';
+  document.getElementById('inv-date').value=inv.issue_date||'';
+  document.getElementById('inv-template').value=validInvoiceTemplate(inv.template_id||'minimal-beige');
+  document.getElementById('inv-cname').value=inv.customer_name||'';
+  document.getElementById('inv-cphone').value=inv.customer_phone||'';
+  document.getElementById('inv-caddr').value=inv.customer_address||'';
+  document.getElementById('inv-disc').value=inv.discount||0;
+  document.getElementById('inv-gst-on').checked=Number(inv.gst_percent||0)>0;
+  document.getElementById('inv-gst-pct').value=inv.gst_percent||18;
+  document.getElementById('inv-status').value=inv.payment_status||'unpaid';
+  document.getElementById('inv-notes').value=inv.notes||'';
+  renderInvItems();
+  if(asPdf)downloadInvoicePdf();else printInvoice();
+}
+async function downloadInvoicePdf(){
+  if(!prepareInvoicePrint())return;
+  if(typeof html2pdf==='undefined'){
+    document.getElementById('invoice-print-area').style.display='none';
+    toast('PDF download library did not load. Use Print / PDF and choose Save as PDF.','err');return;
+  }
+  var area=document.getElementById('invoice-print-area');
+  var invoiceNo=(document.getElementById('inv-no').value||'invoice').replace(/[^a-z0-9_-]/gi,'-');
+  try{
+    await html2pdf().set({margin:[8,8,8,8],filename:'SK-HomeCare-'+invoiceNo+'.pdf',image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(area).save();
+    toast('Invoice PDF downloaded.','ok');
+  }catch(e){toast('Could not create the PDF. Try Print / PDF and choose Save as PDF.','err');}
+  finally{area.style.display='none';}
+}
+function waInvoice(){
+  if(!document.getElementById('inv-no').value){toast('Save the invoice first - it gets its number when saved.','info');return;}
+  var name=document.getElementById('inv-cname').value.trim();
+  var phone=(document.getElementById('inv-cphone').value||'').replace(/\D/g,'');if(phone.length===10)phone='91'+phone;
+  var totals=calcTotals();var invNo=document.getElementById('inv-no').value;var status=document.getElementById('inv-status').value;
+  var msg='Hello '+name+', your invoice '+invNo+' for Rs.'+totals.total.toFixed(2)+' from SK HomeCare is ready. Status: '+status.toUpperCase()+'. Call +91 87936 64463 for queries.';
+  if(phone)window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg),'_blank','noopener');else alert('No phone number on this invoice.');
+}
+async function loadInvoices(){
+  document.getElementById('inv-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--mu)">Loading...</td></tr>';
+  if(!sb)return;
+  var q=sb.from('invoices').select('*').order('created_at',{ascending:false});
+  var dt=document.getElementById('inv-filter-dt').value,st=document.getElementById('inv-filter-st').value;
+  if(dt)q=q.eq('issue_date',dt);if(st)q=q.eq('payment_status',st);
+  var r=await q;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  invCache=r.data||[];
+  var search=(document.getElementById('inv-search').value||'').toLowerCase();
+  var rows=search?invCache.filter(function(i){return (i.invoice_no||'').toLowerCase().includes(search)||(i.customer_name||'').toLowerCase().includes(search)||(i.customer_phone||'').includes(search);}):invCache;
+  var today=new Date();var fd=new Date(today.getFullYear(),today.getMonth(),1);
+  var monthP=invCache.filter(function(i){return i.payment_status==='paid'&&new Date(i.issue_date)>=fd;}).reduce(function(s,i){return s+(parseFloat(i.total)||0);},0);
+  var unpaidT=invCache.filter(function(i){return i.payment_status==='unpaid';}).reduce(function(s,i){return s+(parseFloat(i.total)||0);},0);
+  document.getElementById('inv-stat-month').textContent='₹'+monthP.toLocaleString('en-IN');
+  document.getElementById('inv-stat-unpaid').textContent='₹'+unpaidT.toLocaleString('en-IN');
+  if(!rows.length){document.getElementById('inv-tbody').innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--mu)">No invoices found.</td></tr>';return;}
+  document.getElementById('inv-tbody').innerHTML=rows.map(function(inv){
+    var dtFmt=inv.issue_date||'';try{dtFmt=new Date(inv.issue_date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(_){}
+    var badge=inv.payment_status==='paid'?'<span class="badge badge-green">Paid</span>':'<span class="badge badge-yellow">Unpaid</span>';
+    return '<tr><td><code style="font-size:.78rem;color:var(--gd);font-weight:700">'+esc(inv.invoice_no)+'</code></td><td style="font-size:.82rem">'+esc(dtFmt)+'</td><td><strong>'+esc(inv.customer_name)+'</strong><br><small style="color:var(--mu)">'+esc(inv.customer_phone)+'</small></td><td style="font-weight:700">&#8377;'+parseFloat(inv.total||0).toLocaleString('en-IN')+'</td><td>'+badge+'</td><td><div class="acts"><button class="btn-icon admin-action" data-action="edit-inv" data-id="'+esc(inv.id)+'">Edit</button><button class="btn-icon admin-action" data-action="invoice-print" data-id="'+esc(inv.id)+'">Print</button><button class="btn-icon admin-action" data-action="invoice-download" data-id="'+esc(inv.id)+'">Download</button>'+(inv.payment_status==='unpaid'?'<button class="btn-icon admin-action" data-action="mark-paid" data-id="'+esc(inv.id)+'">Paid</button>':'')+'<button class="btn-icon red admin-action" data-action="del-inv" data-id="'+esc(inv.id)+'">Del</button></div></td></tr>';
+  }).join('');
+}
+function exportInvCSV(){
+  if(!invCache.length){toast('No invoices','info');return;}
+  var NL=String.fromCharCode(10);
+  var cols=['Invoice#','Date','Name','Phone','Address','Subtotal','Discount','GST%','GST Amt','Total','Status','Notes'];
+  var rows=invCache.map(function(i){function e(v){return '"'+(v||'').replace(/"/g,'""')+'"';}return [e(i.invoice_no),e(i.issue_date),e(i.customer_name),e(i.customer_phone),e(i.customer_address),e(i.subtotal),e(i.discount),e(i.gst_percent),e(i.gst_amount),e(i.total),e(i.payment_status),e(i.notes)].join(',');});
+  dlCSV(cols.map(function(c){return '"'+c+'"';}).join(',')+NL+rows.join(NL),'sk-homecare-invoices-'+new Date().toISOString().split('T')[0]+'.csv');
+}
+async function editInv(id){
+  var inv=invCache.find(function(x){return x.id===id;});if(!inv)return;
+  invItems=(inv.items||[]).map(function(i){return Object.assign({},i);});
+  document.getElementById('inv-id').value=inv.id;document.getElementById('inv-mo-title').textContent='Edit Invoice';
+  document.getElementById('inv-no').value=inv.invoice_no;document.getElementById('inv-date').value=inv.issue_date;document.getElementById('inv-template').value=validInvoiceTemplate(inv.template_id||getPreferredInvoiceTemplate());
+  document.getElementById('inv-cname').value=inv.customer_name;document.getElementById('inv-cphone').value=inv.customer_phone;document.getElementById('inv-caddr').value=inv.customer_address;
+  document.getElementById('inv-disc').value=inv.discount||0;document.getElementById('inv-gst-on').checked=inv.gst_percent>0;document.getElementById('inv-gst-pct').value=inv.gst_percent||18;
+  document.getElementById('inv-status').value=inv.payment_status;document.getElementById('inv-notes').value=inv.notes||'';
+  renderInvItems();calcTotals();openMo('inv-mo');
+}
+
+
+var custCache=[];
+async function loadCustomers(){
+  document.getElementById('cust-list').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">Loading...</p>';
+  if(!sb)return;
+  var r=await sb.from('bookings').select('phone,name,area,service,booking_date,status').order('booking_date',{ascending:false});
+  if(r.error){toast('Error: '+r.error.message,'err');return;}
+  var map={};
+  r.data.forEach(function(b){
+    if(!map[b.phone])map[b.phone]={phone:b.phone,name:b.name,area:b.area,visits:0,lastService:null,lastDate:null,completed:0};
+    map[b.phone].visits++;
+    if(!map[b.phone].lastDate||b.booking_date>map[b.phone].lastDate){map[b.phone].lastDate=b.booking_date;map[b.phone].lastService=b.service;}
+    if(b.status==='completed')map[b.phone].completed++;
+  });
+  custCache=Object.values(map).sort(function(a,b){return (b.lastDate||'').localeCompare(a.lastDate||'');});
+  renderCustomers(custCache);
+}
+function renderCustomers(custs){
+  if(!custs.length){document.getElementById('cust-list').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">No customers found.</p>';return;}
+  document.getElementById('cust-list').innerHTML=custs.map(function(c){
+    var init=(c.name||'?')[0].toUpperCase();
+    var dtFmt=c.lastDate||'';try{dtFmt=new Date(c.lastDate+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(_){}
+    return '<div class="cust-row admin-action" data-action="view-cust" data-phone="'+esc(c.phone)+'"><div class="cust-av">'+esc(init)+'</div><div class="cust-info"><div class="cust-name">'+esc(c.name||c.phone)+'</div><div class="cust-meta">'+esc(c.phone)+' &middot; '+esc(c.area||'')+'</div><div class="cust-meta">Last: '+esc(c.lastService||'')+'&nbsp;&mdash;&nbsp;'+esc(dtFmt)+'</div></div><div class="cust-stat"><div class="cust-visits">'+c.visits+' visit'+(c.visits!==1?'s':'')+'</div><div class="cust-last">'+c.completed+' completed</div></div></div>';
+  }).join('');
+}
+function filterCustomers(){
+  var q=(document.getElementById('cust-search').value||'').toLowerCase();
+  renderCustomers(q?custCache.filter(function(c){return (c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q)||(c.area||'').toLowerCase().includes(q);}):custCache);
+}
+async function viewCustomer(phone){
+  if(!sb)return;
+  var c=custCache.find(function(x){return x.phone===phone;})||{};
+  document.getElementById('cust-mo-title').textContent='Customer: '+(c.name||phone);
+  var r1=await sb.from('bookings').select('*').eq('phone',phone).order('booking_date',{ascending:false});
+  var r2=await sb.from('invoices').select('invoice_no,issue_date,total,payment_status').eq('customer_phone',phone).order('issue_date',{ascending:false});
+  var html='<div style="font-size:.78rem;color:var(--mu);margin-bottom:12px">'+esc(phone)+'</div>';
+  html+='<div style="font-weight:700;font-size:.82rem;margin-bottom:8px">Bookings</div>';
+  if(r1.data&&r1.data.length){
+    html+='<table class="tbl" style="font-size:.8rem"><thead><tr><th>Date</th><th>Service</th><th>Status</th></tr></thead><tbody>'+r1.data.map(function(b){var dtFmt=b.booking_date||'';try{dtFmt=new Date(b.booking_date+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(_){}return '<tr><td>'+esc(dtFmt)+'</td><td>'+esc(b.service||'')+'</td><td><span class="badge '+(b.status==='completed'?'badge-blue':'badge-yellow')+'">'+esc(b.status||'')+'</span></td></tr>';}).join('')+'</tbody></table>';
+  }else html+='<p style="font-size:.82rem;color:var(--mu)">No bookings.</p>';
+  if(r2.data&&r2.data.length){
+    html+='<div style="font-weight:700;font-size:.82rem;margin:14px 0 8px">Invoices</div>';
+    html+='<table class="tbl" style="font-size:.8rem"><thead><tr><th>#</th><th>Date</th><th>Total</th><th>Status</th></tr></thead><tbody>'+r2.data.map(function(inv){return '<tr><td><code style="color:var(--gd)">'+esc(inv.invoice_no)+'</code></td><td>'+esc(inv.issue_date||'')+'</td><td>&#8377;'+parseFloat(inv.total||0).toFixed(2)+'</td><td><span class="badge '+(inv.payment_status==='paid'?'badge-green':'badge-yellow')+'">'+esc(inv.payment_status)+'</span></td></tr>';}).join('')+'</tbody></table>';
+  }
+  document.getElementById('cust-mo-body').innerHTML=html;
+  openMo('cust-mo');
+}
+
+var fuWaTemplate='Hello {name}, it has been {days} days since your {service} with SK HomeCare. Time for your next service? Reply to book or call +91 87936 64463.';
+var fuCache=[];
+async function loadFollowUps(){
+  document.getElementById('fu-list').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">Loading...</p>';
+  if(!sb)return;
+  try{var tr=await sb.from('booking_settings').select('value').eq('key','followup_template').single();if(tr.data)fuWaTemplate=tr.data.value;}catch(_){}
+  var today=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});
+  var soon=new Date();soon.setDate(soon.getDate()+14);var soonStr=soon.toISOString().split('T')[0];
+  var filter=document.getElementById('fu-filter').value;
+  var q=sb.from('follow_ups').select('*').eq('status','active');
+  if(filter==='active')q=q.lte('due_date',today);else if(filter==='soon')q=q.lte('due_date',soonStr);
+  q=q.order('due_date',{ascending:true});
+  var cutoff=new Date();cutoff.setDate(cutoff.getDate()-14);var cutoffStr=cutoff.toISOString().split('T')[0];
+  var r=await q;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  fuCache=(r.data||[]).filter(function(f){if(f.snooze_until&&f.snooze_until>today)return false;if(f.last_contacted_at&&f.last_contacted_at.split('T')[0]>cutoffStr)return false;return true;});
+  document.getElementById('fu-count').textContent=fuCache.length+' customer'+(fuCache.length!==1?'s':'');
+  if(!fuCache.length){document.getElementById('fu-list').innerHTML='<p style="color:var(--mu);text-align:center;padding:20px">No follow-ups due.</p>';return;}
+  document.getElementById('fu-list').innerHTML=fuCache.map(function(f){
+    var daysOverdue=Math.floor((new Date(today)-new Date(f.due_date))/86400000);
+    var dueCls=daysOverdue>0?'fu-overdue':'fu-due-soon';
+    var dueLabel=daysOverdue>0?daysOverdue+' days overdue':(daysOverdue===0?'Due today':'Due in '+(-daysOverdue)+' days');
+    var phone=(f.customer_phone||'').replace(/\D/g,'');if(phone.length===10)phone='91'+phone;
+    var daysSince=Math.floor((new Date(today)-new Date(f.completed_date))/86400000);
+    return '<div class="fu-row"><div class="fu-info"><div class="fu-name">'+esc(f.customer_name)+'</div><div class="fu-detail">'+esc(f.customer_phone)+' &bull; '+esc(f.last_service)+'</div><div class="fu-detail '+dueCls+'">'+esc(dueLabel)+'</div></div><div class="acts" style="flex-wrap:wrap">'+
+      (phone?'<button class="btn btn-sm btn-green admin-action" data-action="fu-wa" data-id="'+esc(f.id)+'" data-phone="'+esc(phone)+'" data-name="'+esc(f.customer_name)+'" data-days="'+daysSince+'" data-svc="'+esc(f.last_service)+'">WA Message</button>':'')+
+      '<button class="btn btn-sm btn-ol admin-action" data-action="fu-contacted" data-id="'+esc(f.id)+'">Contacted</button>'+
+      '<select class="fu-snz" data-id="'+esc(f.id)+'" style="font-size:.74rem;padding:4px 7px;border-radius:6px;border:1px solid var(--bd);background:var(--iv2)"><option value="">Snooze...</option><option value="7">7 days</option><option value="30">30 days</option></select>'+
+      '<button class="btn btn-sm btn-ol admin-action" data-action="fu-noint" data-id="'+esc(f.id)+'">Not interested</button>'+
+      '<button class="btn btn-sm" style="background:#FEE2E2;color:var(--red);border:none;border-radius:6px;padding:5px 9px;font-size:.74rem;cursor:pointer" onclick="fuDNC(\''+esc(f.id)+'\')">Do not contact</button>'+
+      '</div></div>';
+  }).join('');
+  document.querySelectorAll('.fu-snz').forEach(function(sel){
+    sel.addEventListener('change',async function(){
+      if(!this.value)return;
+      var id=this.dataset.id;var days=parseInt(this.value);
+      var until=new Date();until.setDate(until.getDate()+days);
+      await sb.from('follow_ups').update({snooze_until:until.toISOString().split('T')[0]}).eq('id',id);
+      toast('Snoozed '+days+' days','ok');this.value='';loadFollowUps();loadFollowUpBadge();
+    });
+  });
+}
+async function fuDNC(id){
+  if(!sb||!confirm('Mark as Do Not Contact?'))return;
+  await sb.from('follow_ups').update({status:'do_not_contact'}).eq('id',id);
+  toast('Marked do not contact','ok');loadFollowUps();loadFollowUpBadge();
+}
+
+var profileCache={};
+async function loadProfile(){
+  if(!sb){toast('Not configured','info');return;}
+  var r=await sb.from('business_profile').select('*').single();if(r.error&&r.error.code!=='PGRST116'){toast('Error: '+r.error.message,'err');return;}
+  profileCache=r.data||{};
+  document.getElementById('p-name').value=profileCache.business_name||'';document.getElementById('p-addr').value=profileCache.address||'';document.getElementById('p-phone').value=profileCache.phone||'';document.getElementById('p-email').value=profileCache.email||'';document.getElementById('p-gst').value=profileCache.gst_number||'';document.getElementById('p-footer').value=profileCache.invoice_footer||'';
+  if(profileCache.logo_url){var el=document.getElementById('profile-logo-preview');el.src=profileCache.logo_url;el.style.display='';}
+}
+document.getElementById('profile-logo-file').addEventListener('change',async function(){
+  if(!this.files||!this.files[0]||!sb)return;
+  var blob=await compressImage(this.files[0],400);var path='logo-'+Date.now()+'.jpg';
+  var up=await sb.storage.from('branding').upload(path,blob,{contentType:'image/jpeg',upsert:true});
+  if(up.error){toast('Logo upload error: '+up.error.message,'err');return;}
+  var url=sb.storage.from('branding').getPublicUrl(path).data.publicUrl;
+  profileCache.logo_url=url;profileCache.logo_path=path;
+  var el=document.getElementById('profile-logo-preview');el.src=url;el.style.display='';
+  ['sb-logo-img','login-logo-wrap'].forEach(function(id){var w=document.getElementById(id);if(w)w.innerHTML='<img src="'+esc(url)+'" alt="logo" style="width:100%;height:100%;object-fit:cover">';});
+  toast('Logo uploaded','ok');
+});
+document.getElementById('save-profile-btn').addEventListener('click',async function(){
+  if(!sb)return;this.disabled=true;
+  var d={business_name:document.getElementById('p-name').value.trim(),address:document.getElementById('p-addr').value.trim(),phone:document.getElementById('p-phone').value.trim(),email:document.getElementById('p-email').value.trim(),gst_number:document.getElementById('p-gst').value.trim()||null,invoice_footer:document.getElementById('p-footer').value.trim(),logo_url:profileCache.logo_url||null,logo_path:profileCache.logo_path||null};
+  var r=profileCache.id?await sb.from('business_profile').update(d).eq('id',profileCache.id):await sb.from('business_profile').insert(d);
+  this.disabled=false;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  toast('Profile saved.','ok');loadProfile();
+});
+
+async function loadSettings(){
+  if(!sb)return;
+  var r=await sb.from('booking_settings').select('*');if(r.error){toast('Error: '+r.error.message,'err');return;}
+  var d={};r.data.forEach(function(row){d[row.key]=row.value;});
+  if(d.time_start)document.getElementById('s-start').value=d.time_start;if(d.time_end)document.getElementById('s-end').value=d.time_end;if(d.time_interval_hours)document.getElementById('s-interval').value=d.time_interval_hours;if(d.max_days_ahead)document.getElementById('s-maxdays').value=d.max_days_ahead;if(d.wa_number)document.getElementById('s-wa').value=d.wa_number;if(d.areas)document.getElementById('s-areas').value=d.areas;if(d.followup_template)document.getElementById('fu-template').value=d.followup_template;
+  if(d.followup_intervals){try{var fi=JSON.parse(d.followup_intervals);if(fi['AC Normal Wash'])document.getElementById('fu-acwash').value=fi['AC Normal Wash'];if(fi['AC Deep Wash'])document.getElementById('fu-acdeep').value=fi['AC Deep Wash'];if(fi['AC Gas Refilling'])document.getElementById('fu-acgas').value=fi['AC Gas Refilling'];if(fi['AC Installation'])document.getElementById('fu-acinst').value=fi['AC Installation'];if(fi['Geyser Service'])document.getElementById('fu-gey').value=fi['Geyser Service'];if(fi['default'])document.getElementById('fu-def').value=fi['default'];}catch(_){}}
+}
+document.getElementById('save-settings-btn').addEventListener('click',async function(){
+  if(!sb)return;this.disabled=true;
+  var items=[{key:'time_start',val:document.getElementById('s-start').value},{key:'time_end',val:document.getElementById('s-end').value},{key:'time_interval_hours',val:document.getElementById('s-interval').value},{key:'max_days_ahead',val:document.getElementById('s-maxdays').value},{key:'wa_number',val:document.getElementById('s-wa').value.trim()}];
+  for(var i=0;i<items.length;i++)await sb.from('booking_settings').upsert({key:items[i].key,value:items[i].val},{onConflict:'key'});
+  this.disabled=false;toast('Settings saved.','ok');
+});
+document.getElementById('save-areas-btn').addEventListener('click',async function(){
+  if(!sb)return;this.disabled=true;
+  await sb.from('booking_settings').upsert({key:'areas',value:document.getElementById('s-areas').value},{onConflict:'key'});
+  this.disabled=false;toast('Areas saved.','ok');
+});
+document.getElementById('save-fu-btn').addEventListener('click',async function(){
+  if(!sb)return;this.disabled=true;
+  var fi={'AC Normal Wash':parseInt(document.getElementById('fu-acwash').value)||90,'AC Deep Wash':parseInt(document.getElementById('fu-acdeep').value)||365,'AC Gas Refilling':parseInt(document.getElementById('fu-acgas').value)||365,'AC Installation':parseInt(document.getElementById('fu-acinst').value)||365,'Geyser Service':parseInt(document.getElementById('fu-gey').value)||365,'default':parseInt(document.getElementById('fu-def').value)||180};
+  await sb.from('booking_settings').upsert({key:'followup_intervals',value:JSON.stringify(fi)},{onConflict:'key'});
+  await sb.from('booking_settings').upsert({key:'followup_template',value:document.getElementById('fu-template').value},{onConflict:'key'});
+  this.disabled=false;toast('Follow-up settings saved.','ok');
+});
+
+document.getElementById('nm-save').addEventListener('click',async function(){
+  var id=document.getElementById('nm-id').value;if(!sb||!id)return;this.disabled=true;
+  var r=await sb.from('bookings').update({notes:document.getElementById('nm-notes').value}).eq('id',id);
+  this.disabled=false;if(r.error){toast('Error: '+r.error.message,'err');return;}
+  toast('Notes saved.','ok');closeMo('notes-mo');loadBookings();
+});
+
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('.admin-action');if(!btn)return;
+  var a=btn.dataset.action,id=btn.dataset.id;
+  if(a==='edit-svc')editSvc(id);
+  if(a==='del-svc'&&confirm('Delete "'+btn.dataset.name+'"?')&&sb)sb.from('services').delete().eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Deleted','ok');loadServices();}});
+  if(a==='edit-cap'){var nc=prompt('Edit caption:',btn.dataset.cap);if(nc!==null&&sb)sb.from('gallery').update({caption:nc}).eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Updated','ok');loadGallery();}});}
+  if(a==='del-gal'&&confirm('Delete this image?')&&sb){sb.storage.from('gallery').remove([btn.dataset.path]);sb.from('gallery').delete().eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Deleted','ok');loadGallery();}});}
+  if(a==='toggle-ba'&&sb)sb.from('before_after').update({active:btn.dataset.active!=='true'}).eq('id',id).then(function(){toast('Updated','ok');loadBA();});
+  if(a==='del-ba'&&confirm('Delete this pair?')&&sb){sb.storage.from('gallery').remove([btn.dataset.bp,btn.dataset.ap]);sb.from('before_after').delete().eq('id',id).then(function(){toast('Deleted','ok');loadBA();});}
+  if(a==='edit-rv')editRv(id);
+  if(a==='del-rv'&&confirm('Delete this review?')&&sb)sb.from('reviews').delete().eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Deleted','ok');loadReviews();}});
+  if(a==='edit-faq')editFaq(id);
+  if(a==='del-faq'&&confirm('Delete this FAQ?')&&sb)sb.from('faqs').delete().eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Deleted','ok');loadFAQs();}});
+  if(a==='bk-notes'){var bk=bkAllRows.find(function(x){return String(x.id)===String(id);});if(bk){document.getElementById('nm-id').value=bk.id;document.getElementById('nm-notes').value=bk.notes||'';var rows=[['Ref','HC-'+(bk.id||'').replace(/-/g,'').substring(0,8).toUpperCase()],['Service',bk.service||''],['Date',bk.booking_date||''],['Customer',bk.name||''],['Phone',bk.phone||''],['Area',bk.area||'']];document.getElementById('nm-details').innerHTML=rows.map(function(r){return '<div style="display:flex;gap:8px"><span style="color:var(--mu);min-width:72px">'+esc(r[0])+'</span><strong>'+esc(r[1])+'</strong></div>';}).join('');openMo('notes-mo');}}
+  if(a==='bk-invoice')openInvEditor(id);
+  if(a==='del-bk'&&confirm('Delete this booking?')&&sb)sb.from('bookings').delete().eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Deleted','ok');loadBookings();}});
+  if(a==='edit-inv')editInv(id);
+  if(a==='invoice-print')outputSavedInvoice(id,false);
+  if(a==='invoice-download')outputSavedInvoice(id,true);
+  if(a==='mark-paid'&&sb)sb.from('invoices').update({payment_status:'paid'}).eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Marked paid','ok');loadInvoices();}});
+  if(a==='del-inv'&&confirm('Delete this invoice?')&&sb)sb.from('invoices').delete().eq('id',id).then(function(r){if(r.error)toast('Error: '+r.error.message,'err');else{toast('Deleted','ok');loadInvoices();}});
+  if(a==='view-cust')viewCustomer(btn.dataset.phone);
+  if(a==='fu-wa'){var days=btn.dataset.days;var msg=fuWaTemplate.replace('{name}',btn.dataset.name).replace('{days}',days).replace('{service}',btn.dataset.svc);window.open('https://wa.me/'+btn.dataset.phone+'?text='+encodeURIComponent(msg),'_blank','noopener');if(sb)sb.from('follow_ups').update({last_contacted_at:new Date().toISOString(),status:'contacted'}).eq('id',id).then(function(){loadFollowUps();loadFollowUpBadge();});}
+  if(a==='fu-contacted'&&sb)sb.from('follow_ups').update({last_contacted_at:new Date().toISOString(),status:'contacted'}).eq('id',id).then(function(){toast('Marked contacted','ok');loadFollowUps();loadFollowUpBadge();});
+  if(a==='fu-noint'&&sb)sb.from('follow_ups').update({status:'not_interested'}).eq('id',id).then(function(){toast('Marked not interested','ok');loadFollowUps();loadFollowUpBadge();});
+});
+document.addEventListener('change',function(e){
+  var sel=e.target.closest('.bk-st-sel');if(!sel||!sel.value)return;
+  var id=sel.dataset.id,ns=sel.value;sel.value='';updateBkStatus(id,ns);
+});
+
+</script>
+</body>
+</html>
